@@ -43,7 +43,7 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     @Override
     public void adicionarMusica(Musica musica) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
     

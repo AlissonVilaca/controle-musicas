@@ -33,6 +33,12 @@ public class Musica {
         this.letra = letra;  
     }
 
+    /**
+     * Constrói música em branco, apenas para ser usada como
+     * objeto de manipulação
+     */
+    public Musica() {}
+
    /* public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -49,23 +55,23 @@ public class Musica {
         this.genero = genero;
     }
 */
-    public String getTitulo() {
+    public String obterTitulo() {
         return titulo;
     }
 
-    public String getArtista() {
+    public String obterArtista() {
         return artista;
     }
 
-    public int getAno() {
+    public int obterAno() {
         return ano;
     }
 
-    public String getGenero() {
+    public String obterGenero() {
         return genero;
     } 
     
-    public String getLetra() {
+    public String obterLetra() {
         return letra;
     } 
     

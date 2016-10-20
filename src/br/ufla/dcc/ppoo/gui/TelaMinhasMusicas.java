@@ -90,16 +90,12 @@ public class TelaMinhasMusicas {
             I18N.obterRotuloMusicaTitulo(),
             I18N.obterRotuloMusicaArtista()
         };
-        
-        // Objeto com o usuário logado
-        Usuario usuario =  sessaoUsuario.obterUsuario();
-        
         // Lista utilizada para preencher a JTable com a lista de músicas do usuário
         List<String[]> lista = new ArrayList<>();
         
         // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
-        for(Musica u : usuario.obterLista().obterListaMusica() ){
-            lista.add(new String[]{u.getTitulo(),u.getArtista()});
+        for(Musica m : sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica() ){
+            lista.add(new String[]{m.obterTitulo(),m.obterArtista()});
         }        
         
         // Modelo utilizado na Jtable de músicas
@@ -323,16 +319,13 @@ public class TelaMinhasMusicas {
     /**
      * Trata a seleção de músicas na grade.
      */
-    private void selecionouMusica() {          
-        // Objeto com o usuário logado
-        Usuario usuario =  sessaoUsuario.obterUsuario();
-        
+    private void selecionouMusica() {                  
         //Text Views recebem os valores da musica que é selecionada na tabela
-        txtTitulo.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getTitulo()); 
-        txtArtista.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getArtista());
-        txtAno.setText(Integer.toString(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getAno()));
-        txtGenero.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getGenero());
-        taLetra.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getLetra());
+        txtTitulo.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterTitulo()); 
+        txtArtista.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterArtista());
+        txtAno.setText(Integer.toString(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterAno()));
+        txtGenero.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterGenero());
+        taLetra.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterLetra());
 
                 
         /* Dados "fake"
@@ -373,7 +366,9 @@ public class TelaMinhasMusicas {
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prepararComponentesEstadoInicial();
+                // chama o método adicionar musica da MúsicaDAOLista
+                sessaoUsuario.obterUsuario().obterMusicas().adicionarMusica(carregarMusica());
+                prepararComponentesEstadoInicial();                
             }
         });
 
@@ -416,5 +411,17 @@ public class TelaMinhasMusicas {
         janela.setModal(true);
         janela.setVisible(true);
         janela.setResizable(false);
+    }
+    
+    /**
+     * Retorna uma nova música a partir do dados passados.
+     * @return Nova música
+     */
+    private Musica carregarMusica() {
+        return new Musica(txtTitulo.getText(),
+                txtArtista.getText(),
+                Integer.parseInt(txtAno.getText()),
+                txtGenero.getText(),
+                taLetra.getText());
     }
 }
