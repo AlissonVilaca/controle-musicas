@@ -1,5 +1,6 @@
 package br.ufla.dcc.ppoo.modelo;
 
+import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import java.util.Arrays;
 
 /**
@@ -14,18 +15,21 @@ public class Usuario {
     private char[] senha;
     // nome do usuário
     private String nome;
-
+    // lista de musicas do usuario
+    private MusicaDAOLista listaMusica;
+    
     /**
      * Constrói um usuário a partir de seu login, senha e nome.
      * 
      * @param login Login do usuário.
      * @param senha Senha do usuário.
-     * @param nome Nome do usuário.
+     * @param nome Nome do usuário.    
      */
     public Usuario(String login, char[] senha, String nome) {
         this.login = login;
         this.senha = Arrays.copyOf(senha, senha.length);
         this.nome = nome;
+        listaMusica = new MusicaDAOLista();                 
     }
     
     /**
@@ -65,5 +69,13 @@ public class Usuario {
         return nome;
     }
     
-    
+    /**
+     * Retorna o objeto DAO da lista de musicas.
+     * 
+     * @return O nome do usuário.
+     */
+    public MusicaDAOLista obterLista() {
+        return listaMusica;
+    }
+      
 }

@@ -18,7 +18,7 @@ public class SessaoUsuario {
     /**
      * A princípio construtor não faz nada
      */
-    private SessaoUsuario() {}
+    public SessaoUsuario() {}
     
     /**
      * Retorna a instância única da classe (Padrão de Projeto Singleton)

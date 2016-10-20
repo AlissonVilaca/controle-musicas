@@ -2,7 +2,10 @@ package br.ufla.dcc.ppoo.gui;
 
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
+import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.util.Utilidades;
+import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -10,6 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -21,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Classe que representa a tela Minhas Músicas
@@ -31,7 +37,9 @@ public class TelaMinhasMusicas {
 
     // referência para a tela principal
     private final TelaPrincipal telaPrincipal;
-
+    // objeto de controle de sessão (autenticação) do usuário
+    private final SessaoUsuario sessaoUsuario;
+    
     // componentes da tela
     private JDialog janela;
     private GridBagLayout layout;
@@ -54,12 +62,14 @@ public class TelaMinhasMusicas {
     private JTextArea taLetra;
 
     /**
-     * Constrói a tela de autenticação guardando a referência da tela principal.
+     * Constrói a tela de autenticação guardando a referência da tela principal 
+     * e obtém a instância do usuário logado.
      *
      * @param telaPrincipal Referência da tela principal.
      */
     public TelaMinhasMusicas(TelaPrincipal telaPrincipal) {
         this.telaPrincipal = telaPrincipal;
+        sessaoUsuario = SessaoUsuario.obterInstancia();
     }
 
     /**
@@ -75,19 +85,29 @@ public class TelaMinhasMusicas {
     /**
      * Constrói a janela tratando internacionalização, componentes e layout.
      */
-    private void construirTabela() {
+    private void construirTabela() {              
         Object[] titulosColunas = {
             I18N.obterRotuloMusicaTitulo(),
             I18N.obterRotuloMusicaArtista()
         };
-
-        // Dados "fake"
-        Object[][] dados = {
-            {"Like a Stone", "Audioslave"},
-            {"Alive", "Pearl Jam"}
-        };
-
-        tbMusicas = new JTable(dados, titulosColunas);
+        
+        // Objeto com o usuário logado
+        Usuario usuario =  sessaoUsuario.obterUsuario();
+        
+        // Lista utilizada para preencher a JTable com a lista de músicas do usuário
+        List<String[]> lista = new ArrayList<>();
+        
+        // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
+        for(Musica u : usuario.obterLista().obterListaMusica() ){
+            lista.add(new String[]{u.getTitulo(),u.getArtista()});
+        }        
+        
+        // Modelo utilizado na Jtable de músicas
+        DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
+   
+        // JTable recebe o modelo criado, com a listas de músicas do usuário
+        tbMusicas = new JTable();
+        tbMusicas.setModel(model);
         tbMusicas.setPreferredScrollableViewportSize(new Dimension(500, 70));
         tbMusicas.setFillsViewportHeight(true);
     }
@@ -301,16 +321,27 @@ public class TelaMinhasMusicas {
     }
 
     /**
-     * Trata a selação de músicas na grade.
+     * Trata a seleção de músicas na grade.
      */
-    private void selecionouMusica() {
-        // Dados "fake"
-        String texto = String.format("Linha selecionada: %d", tbMusicas.getSelectedRow());
-        txtTitulo.setText(texto);
-        txtArtista.setText(texto);
-        txtAno.setText(texto);
-        txtGenero.setText(texto);
-        taLetra.setText(texto);
+    private void selecionouMusica() {          
+        // Objeto com o usuário logado
+        Usuario usuario =  sessaoUsuario.obterUsuario();
+        
+        //Text Views recebem os valores da musica que é selecionada na tabela
+        txtTitulo.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getTitulo()); 
+        txtArtista.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getArtista());
+        txtAno.setText(Integer.toString(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getAno()));
+        txtGenero.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getGenero());
+        taLetra.setText(usuario.obterLista().obterListaMusica().get(tbMusicas.getSelectedRow()).getLetra());
+
+                
+        /* Dados "fake"
+          String texto = String.format("Linha selecionada: %d", tbMusicas.getSelectedRow());
+          txtTitulo.setText(texto);
+          txtArtista.setText(texto);
+          txtAno.setText(texto);
+          txtGenero.setText(texto);
+          taLetra.setText(texto);   */
     }
 
     /**
