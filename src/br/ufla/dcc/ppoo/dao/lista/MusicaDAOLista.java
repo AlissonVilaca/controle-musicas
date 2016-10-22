@@ -5,11 +5,17 @@ import br.ufla.dcc.ppoo.modelo.Musica;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Implementação do DAO Musica através de Lista em memória
+/** 
+ * Implementação do Data Access Object (Padrão de Projeto) da Musica através de
+ * Lista em memória
  *
  * @author alisson-vilaca
  */
 public class MusicaDAOLista implements MusicaDAO{
+    
+    // instância única da classe (Padrão de Projeto Singleton)
+    private static MusicaDAOLista instancia;
+    
     // lista em em memória das musicas de um usuario cadastradas
     private List<Musica> listaMusica;
 
@@ -36,6 +42,20 @@ public class MusicaDAOLista implements MusicaDAO{
         return listaMusica;
     }
     
+    /**
+     * Faz a verificação se a música já está na lista do usuário atual
+     * @param musica Musica a ser verificada
+     * @param lista Lista de músicas do usuário atual
+     * @return 
+     */
+    public boolean comparaMusicas (Musica musica, List<Musica> lista){
+        for (Musica u : lista) {
+            if (musica.obterTitulo().equals(u.obterTitulo())) {
+                return true;
+            }
+        }        
+        return false;
+    }
     
     /**
      * Método ainda não implementado, Deve adicionar a música passada na lista
@@ -43,7 +63,7 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     @Override
     public void adicionarMusica(Musica musica) {
-        
+        listaMusica.add(musica);
     }
     
     

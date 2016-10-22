@@ -3,9 +3,9 @@ package br.ufla.dcc.ppoo.gui;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.modelo.Musica;
-import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.util.Utilidades;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -39,6 +41,8 @@ public class TelaMinhasMusicas {
     private final TelaPrincipal telaPrincipal;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
+    // referência para o gerenciador de músicas
+    private final GerenciadorMusicas gerenciadorMusicas;
     
     // componentes da tela
     private JDialog janela;
@@ -70,6 +74,7 @@ public class TelaMinhasMusicas {
     public TelaMinhasMusicas(TelaPrincipal telaPrincipal) {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
+        gerenciadorMusicas = new GerenciadorMusicas();
     }
 
     /**
@@ -326,15 +331,6 @@ public class TelaMinhasMusicas {
         txtAno.setText(Integer.toString(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterAno()));
         txtGenero.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterGenero());
         taLetra.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterLetra());
-
-                
-        /* Dados "fake"
-          String texto = String.format("Linha selecionada: %d", tbMusicas.getSelectedRow());
-          txtTitulo.setText(texto);
-          txtArtista.setText(texto);
-          txtAno.setText(texto);
-          txtGenero.setText(texto);
-          taLetra.setText(texto);   */
     }
 
     /**
@@ -366,16 +362,30 @@ public class TelaMinhasMusicas {
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // chama o método adicionar musica da MúsicaDAOLista
-                sessaoUsuario.obterUsuario().obterMusicas().adicionarMusica(carregarMusica());
-                prepararComponentesEstadoInicial();                
+                try{ 
+                    //Faz o tratamento de erro caso seja inserido um ano inválido
+                    if (carregarMusica() == null){
+                        throw new Exception(I18N.obterErroAnoInvalido());
+                    } else{                                  
+                        // chama o método adicionar musica da MúsicaDAOLista
+                        gerenciadorMusicas.cadastrarMusica(carregarMusica());
+                    }
+                } catch (Exception ex) {
+                    Utilidades.msgErro(ex.getMessage());
+                }                
+                Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
+                prepararComponentesEstadoInicial();      
+                janela.dispose();
+                inicializar();                
             }
         });
 
         btnNovaMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prepararComponentesEstadoNovaMusica();
+                construirTabela();
+                prepararComponentesEstadoNovaMusica();                
+                
             }
         });
 
@@ -418,10 +428,15 @@ public class TelaMinhasMusicas {
      * @return Nova música
      */
     private Musica carregarMusica() {
-        return new Musica(txtTitulo.getText(),
+        try {
+            return new Musica(txtTitulo.getText(),
                 txtArtista.getText(),
                 Integer.parseInt(txtAno.getText()),
                 txtGenero.getText(),
                 taLetra.getText());
+            
+            } catch (Exception ex) {
+                return null;                
+        }  
     }
 }
