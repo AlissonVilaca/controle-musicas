@@ -1,7 +1,5 @@
 package br.ufla.dcc.ppoo.servicos;
 
-import br.ufla.dcc.ppoo.dao.MusicaDAO;
-import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
@@ -23,7 +21,19 @@ public class GerenciadorMusicas {
      */
     public GerenciadorMusicas(){
         sessaoUsuario = SessaoUsuario.obterInstancia();
-    }    
+    }
+    
+    public void editarMusica(Musica musica, int indice) throws Exception{        
+        boolean ret = sessaoUsuario.obterUsuario().obterMusicas().comparaMusicas(musica, sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica());
+        if (ret) {
+            throw new Exception(I18N.obterErroMusicaJaCadastrada());
+        } else { 
+           sessaoUsuario.obterUsuario().obterMusicas().alterarMusica(musica, indice);
+            
+            
+        }      
+    
+    }
     
      /**
      * Cadastra uma musica passada no sistema.

@@ -43,6 +43,8 @@ public class TelaMinhasMusicas {
     private final SessaoUsuario sessaoUsuario;
     // referência para o gerenciador de músicas
     private final GerenciadorMusicas gerenciadorMusicas;
+    // variavel para controle do botão salvar;
+    private boolean novo = true;
     
     // componentes da tela
     private JDialog janela;
@@ -355,6 +357,7 @@ public class TelaMinhasMusicas {
         btnEditarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                novo = false;
                 prepararComponentesEstadoEditouMusica();
             }
         });
@@ -362,27 +365,36 @@ public class TelaMinhasMusicas {
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{ 
+                try{                     
                     //Faz o tratamento de erro caso seja inserido um ano inválido
                     if (carregarMusica() == null){
                         throw new Exception(I18N.obterErroAnoInvalido());
-                    } else{                                  
-                        // chama o método adicionar musica da MúsicaDAOLista
-                        gerenciadorMusicas.cadastrarMusica(carregarMusica());
+                    } else{ 
+                        if (novo){
+                            // chama o método adicionar musica da MúsicaDAOLista
+                            gerenciadorMusicas.cadastrarMusica(carregarMusica());
+                            Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
+                        } else {
+                            // chama o método editar musica da MúsicaDAOLista
+                            gerenciadorMusicas.editarMusica(carregarMusica(),tbMusicas.getSelectedRow());
+                            Utilidades.msgInformacao(I18N.obterSucessoAlteracaoMusica());
+                        }
                     }
                 } catch (Exception ex) {
-                    Utilidades.msgErro(ex.getMessage());
-                }                
-                Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
+                    Utilidades.msgErro(ex.getMessage());  
+                }    
+                construirTabela();
                 prepararComponentesEstadoInicial();      
                 janela.dispose();
-                inicializar();                
+                inicializar();  
             }
         });
 
         btnNovaMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tbMusicas.disable();
+                novo=true;
                 construirTabela();
                 prepararComponentesEstadoNovaMusica();                
                 

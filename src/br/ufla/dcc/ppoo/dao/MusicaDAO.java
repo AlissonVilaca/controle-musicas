@@ -15,4 +15,12 @@ public interface MusicaDAO {
      */
     public void adicionarMusica(Musica musica);
     
+    
+    /**
+     * Edita os dados de uma musica recebida
+     * @param musica Musica a ser alterada
+     * @param indice Índice da música na lista
+     */
+    //public void alterarMusica(Musica musica, int indice);
+    
 }

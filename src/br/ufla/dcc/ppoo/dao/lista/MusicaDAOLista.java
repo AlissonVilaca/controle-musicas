@@ -43,6 +43,16 @@ public class MusicaDAOLista implements MusicaDAO{
     }
     
     /**
+     * Edita os dados de uma musica recebida
+     * @param musica Musica a ser alterada
+     * @param indice Índice da música na lista
+     */
+    public void alterarMusica(Musica musica, int indice) {
+        listaMusica.set(indice, musica);
+        
+    }
+    
+    /**
      * Faz a verificação se a música já está na lista do usuário atual
      * @param musica Musica a ser verificada
      * @param lista Lista de músicas do usuário atual
@@ -50,7 +60,12 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     public boolean comparaMusicas (Musica musica, List<Musica> lista){
         for (Musica u : lista) {
-            if (musica.obterTitulo().equals(u.obterTitulo())) {
+            if ((musica.obterTitulo().equals(u.obterTitulo()))
+                    && (musica.obterAno() == u.obterAno()) 
+                    && (musica.obterArtista().equals(u.obterArtista())) 
+                    && (musica.obterGenero().equals(u.obterTitulo()))
+                    && (musica.obterLetra().equals(u.obterLetra()))
+                    ) {
                 return true;
             }
         }        

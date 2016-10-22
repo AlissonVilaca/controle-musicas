@@ -39,41 +39,49 @@ public class Musica {
      */
     public Musica() {}
 
-   /* public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
-
-    public void setAno(int ano) {
-        this.ano = ano;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-*/
+    /**
+     * Método utilizado para obter o título da música
+     * 
+     * @return Título da música
+     */
     public String obterTitulo() {
         return titulo;
     }
-
+    
+    /**
+     * Método utilizado para obter o artista da música
+     * 
+     * @return Artista da música
+     */
     public String obterArtista() {
         return artista;
     }
-
+    
+    /**
+     * Método utilizado para obter o ano da música
+     * 
+     * @return Ano da música
+     */
     public int obterAno() {
         return ano;
     }
 
+    /**
+     * Método utilizado para obter o gênero da música
+     * 
+     * @return Gênero da música
+     */
     public String obterGenero() {
         return genero;
     } 
     
+    /**
+     * Método utilizado para obter o título da música
+     * 
+     * @return Título da música
+     */
     public String obterLetra() {
         return letra;
     } 
-    
     
 }

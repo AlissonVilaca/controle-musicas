@@ -246,6 +246,15 @@ public class I18N {
     }
     
     /**
+     * Retorna o texto da mensagem de cadastro de usuário efetuado com sucesso.
+     *
+     * @return Texto da mensagem de cadastro de usuário efetuado com sucesso.
+     */
+    public static String obterSucessoAlteracaoMusica() {
+        return rb.getString("sucesso.musica.alteracao");
+    }    
+    
+    /**
      * Retorna o título da mensagem de confirmação.
      *
      * @return Título da mensagem de confirmação.
