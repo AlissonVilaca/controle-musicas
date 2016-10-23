@@ -24,13 +24,6 @@ public class MusicaDAOLista implements MusicaDAO{
     */ 
     public MusicaDAOLista(){
         listaMusica = new ArrayList<Musica>();                
-        
-        // Dados para teste
-        listaMusica.add(new Musica("teste1","teste2",12,"teste3","teste4"));
-        listaMusica.add(new Musica("teste2","test4",12,"teste5", "teste5"));
-        listaMusica.add(new Musica("teste3","teste5",12,"teste6","teste6"));
-        listaMusica.add(new Musica("teste4","teste6",12,"teste7", "teste56"));
-        listaMusica.add(new Musica("teste5","teste7",12,"teste8", "fodasse"));
     }
      
     /**
@@ -40,20 +33,11 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     public List<Musica> obterListaMusica() {
         return listaMusica;
-    }
-    
-    /**
-     * Edita os dados de uma musica recebida
-     * @param musica Musica a ser alterada
-     * @param indice Índice da música na lista
-     */
-    public void alterarMusica(Musica musica, int indice) {
-        listaMusica.set(indice, musica);
-        
-    }
+    }        
     
     /**
      * Faz a verificação se a música já está na lista do usuário atual
+     * 
      * @param musica Musica a ser verificada
      * @param lista Lista de músicas do usuário atual
      * @return 
@@ -73,12 +57,32 @@ public class MusicaDAOLista implements MusicaDAO{
     }
     
     /**
-     * Método ainda não implementado, Deve adicionar a música passada na lista
-     * @param musica musica que será adicionada na lista
+     * Adiciona a música passada na lista
+     * 
+     * @param musica Musica que será adicionada na lista
      */
-    @Override
+//    @Override
     public void adicionarMusica(Musica musica) {
         listaMusica.add(musica);
+    }
+    
+    /**
+     * Edita os dados de uma musica recebida
+     * 
+     * @param musica Musica a ser alterada
+     * @param indice Índice da música na lista
+     */
+    public void editarMusica(Musica musica, int indice) {
+        listaMusica.set(indice, musica);        
+    }
+    
+    /**
+     * Deleta uma musica recebida
+     * 
+     * @param indice Índice da música na lista de músicas do usuário
+     */
+    public void deletarMusica(int indice) {
+        listaMusica.remove(indice);
     }
     
     

@@ -1,6 +1,5 @@
 package br.ufla.dcc.ppoo.modelo;
 
-import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import java.util.Arrays;
 

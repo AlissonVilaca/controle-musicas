@@ -219,39 +219,48 @@ public class I18N {
         return rb.getString("sucesso.usuario.cadastro");
     }
 /**
-     * Retorna o texto da mensagem de usuário já cadastrado.
+     * Retorna o texto da mensagem de música já cadastrado.
      *
-     * @return Texto da mensagem de usuário já cadastrado.
+     * @return Texto da mensagem de música já cadastrado.
      */
     public static String obterErroMusicaJaCadastrada() {
         return rb.getString("erro.musica.ja_cadastrado");
     }
     
     /**
-     * Retorna o texto da mensagem de usuário já cadastrado.
+     * Retorna o texto da mensagem de ano inválido.
      *
-     * @return Texto da mensagem de usuário já cadastrado.
+     * @return Texto da mensagem de ano inválido.
      */
     public static String obterErroAnoInvalido() {
         return rb.getString("erro.musica.ano_invalido");
     }
     
     /**
-     * Retorna o texto da mensagem de cadastro de usuário efetuado com sucesso.
+     * Retorna o texto da mensagem de cadastro de música efetuado com sucesso.
      *
-     * @return Texto da mensagem de cadastro de usuário efetuado com sucesso.
+     * @return Texto da mensagem de cadastro de música efetuado com sucesso.
      */
     public static String obterSucessoCadastroMusica() {
         return rb.getString("sucesso.musica.cadastro");
     }
     
     /**
-     * Retorna o texto da mensagem de cadastro de usuário efetuado com sucesso.
+     * Retorna o texto da mensagem de música alterada com sucesso.
      *
-     * @return Texto da mensagem de cadastro de usuário efetuado com sucesso.
+     * @return Texto da mensagem de música alterada com sucesso..
      */
     public static String obterSucessoAlteracaoMusica() {
         return rb.getString("sucesso.musica.alteracao");
+    }    
+    
+    /**
+     * Retorna o texto da mensagem de música removida com sucesso..
+     *
+     * @return Texto da mensagem de música alterada com sucesso..
+     */
+    public static String obterSucessoRemocaoMusica() {
+        return rb.getString("sucesso.musica.remocao");
     }    
     
     /**

@@ -37,7 +37,7 @@ public class Utilidades {
     }
     
     /**
-     * Exibe uma caixa de mensagem de erro com a mensagem passada  (utilizando 
+     * Exibe uma caixa de mensagem de erro com a mensagem passada (utilizando 
      * internacionalização).
      * 
      * @param mensagem String que representa a chave da mensagem internacionalizada.

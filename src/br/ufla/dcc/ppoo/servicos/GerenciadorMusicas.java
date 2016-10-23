@@ -16,29 +16,17 @@ public class GerenciadorMusicas {
     private SessaoUsuario sessaoUsuario;
     
     /**
-     * Constroi o gerenciador de musicas do usuário logado, inicializando as 
+     * Constrói o gerenciador de musicas do usuário logado, inicializando as 
      * camadas de acesso.
      */
     public GerenciadorMusicas(){
         sessaoUsuario = SessaoUsuario.obterInstancia();
     }
     
-    public void editarMusica(Musica musica, int indice) throws Exception{        
-        boolean ret = sessaoUsuario.obterUsuario().obterMusicas().comparaMusicas(musica, sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica());
-        if (ret) {
-            throw new Exception(I18N.obterErroMusicaJaCadastrada());
-        } else { 
-           sessaoUsuario.obterUsuario().obterMusicas().alterarMusica(musica, indice);
-            
-            
-        }      
-    
-    }
-    
-     /**
+    /**
      * Cadastra uma musica passada no sistema.
      * 
-     * @param usuario Música a ser cadastrada.
+     * @param musica Música a ser cadastrada.
      * @throws Exception Exceção gerada caso a música já esteja cadastrada.
      */
     public void cadastrarMusica(Musica musica) throws Exception{
@@ -50,4 +38,27 @@ public class GerenciadorMusicas {
         }                
     }
     
+    /**
+     * Altera uma música passada no sistema
+     * 
+     * @param musica Música que será alterada
+     * @param indice Índice da ḿúsica da lista
+     * @throws Exception Exceção gerada caso a música nova já exista na lista
+     */
+    public void alterarMusica(Musica musica, int indice) throws Exception{        
+        boolean ret = sessaoUsuario.obterUsuario().obterMusicas().comparaMusicas(musica, sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica());
+        if (ret) {
+            throw new Exception(I18N.obterErroMusicaJaCadastrada());
+        } else { 
+           sessaoUsuario.obterUsuario().obterMusicas().editarMusica(musica, indice);                        
+        }          
+    }        
+    
+    /**
+     * Remove uma música passada no sistema
+     * @param indice Índice da lista referente a música a ser removida
+     */
+    public void removerMusica(int indice){
+        sessaoUsuario.obterUsuario().obterMusicas().deletarMusica(indice);
+    }    
 }
