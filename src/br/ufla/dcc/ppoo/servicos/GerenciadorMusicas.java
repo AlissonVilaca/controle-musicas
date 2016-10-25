@@ -12,7 +12,8 @@ import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
  */
 public class GerenciadorMusicas {
     
-    // atributo utilizado como camada de acesso a dados do cadastro do usuario
+    // atributo utilizado para podermos manipular a lista de músicas do usuário
+    // logado atualmente
     private SessaoUsuario sessaoUsuario;
     
     /**

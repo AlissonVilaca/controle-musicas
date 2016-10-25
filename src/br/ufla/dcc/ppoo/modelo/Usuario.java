@@ -15,7 +15,12 @@ public class Usuario {
     private char[] senha;
     // nome do usuário
     private String nome;
-    // lista de musicas do usuario
+    // Lista de musicas do usuario. Ao invés de criarmos uma lista de músicas
+    // que contenha todas as músicas de todos os usuários, resolvemos criar
+    // uma lista de musicas como atributo para cada usuário. Dessa forma nós 
+    // poderemos fazer o controle das músicas do usuário que está logado 
+    // no momento, utilizando um objeto SessãoUsuario na classe  
+    // GerenciadorMusicas
     private MusicaDAOLista musicaDAO;
     
     /**

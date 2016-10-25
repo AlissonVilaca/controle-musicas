@@ -237,6 +237,15 @@ public class I18N {
     }
     
     /**
+     * Retorna o texto da mensagem de ano inválido.
+     *
+     * @return Texto da mensagem de ano inválido.
+     */
+    public static String obterErroTituloInvalido() {
+        return rb.getString("erro.musica.titulo_invalido");
+    }
+    
+    /**
      * Retorna o texto da mensagem de cadastro de música efetuado com sucesso.
      *
      * @return Texto da mensagem de cadastro de música efetuado com sucesso.

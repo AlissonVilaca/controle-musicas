@@ -1,20 +1,14 @@
 package br.ufla.dcc.ppoo.dao.lista;
-
-import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import java.util.ArrayList;
 import java.util.List;
 
 /** 
- * Implementação do Data Access Object (Padrão de Projeto) da Musica através de
- * Lista em memória
+ * Implementação da lista de músicas, que é um atributo da Classe Usuário
  *
  * @author alisson-vilaca
  */
-public class MusicaDAOLista implements MusicaDAO{
-    
-    // instância única da classe (Padrão de Projeto Singleton)
-    private static MusicaDAOLista instancia;
+public class MusicaDAOLista {    
     
     // lista em em memória das musicas de um usuario cadastradas
     private List<Musica> listaMusica;
@@ -83,8 +77,6 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     public void deletarMusica(int indice) {
         listaMusica.remove(indice);
-    }
-    
-    
+    }        
     
 }

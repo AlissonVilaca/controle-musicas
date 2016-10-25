@@ -363,10 +363,11 @@ public class TelaMinhasMusicas {
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{                     
-                    //Faz o tratamento de erro caso seja inserido um ano inválido
-                    if (carregarMusica() == null){
+                try{                                         
+                    if (carregarMusica() == null){  //Faz o tratamento de erro caso seja inserido um ano inválido           
                         throw new Exception(I18N.obterErroAnoInvalido());
+                    } else if(carregarMusica().obterTitulo().equals("")){   //faz o tratamento de erros caso o titulo esteja em branco
+                        throw new Exception(I18N.obterErroTituloInvalido());
                     } else{ 
                         if (novo){
                             // chama o método adicionar musica da MúsicaDAOLista
