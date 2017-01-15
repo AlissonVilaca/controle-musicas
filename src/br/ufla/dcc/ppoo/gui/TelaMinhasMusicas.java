@@ -1,5 +1,6 @@
 package br.ufla.dcc.ppoo.gui;
 
+import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.modelo.Musica;
@@ -39,10 +40,14 @@ public class TelaMinhasMusicas {
     private final TelaPrincipal telaPrincipal;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
+    // objeto usado para recuperar a lista de músicas
+    private final MusicaDAOLista music;       
     // referência para o gerenciador de músicas
     private final GerenciadorMusicas gerenciadorMusicas;
     // variavel para controle do botão salvar;
     private boolean novo = true;
+    // variavel auxiliar que recebe o nome da musica selecionada
+    private String selecionada = null;
     
     // componentes da tela
     private JDialog janela;
@@ -75,6 +80,7 @@ public class TelaMinhasMusicas {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorMusicas = new GerenciadorMusicas();
+        music = MusicaDAOLista.obterInstancia();
     }
 
     /**
@@ -99,10 +105,10 @@ public class TelaMinhasMusicas {
         List<String[]> lista = new ArrayList<>();
         
         // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
-        sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().stream().forEach((m) -> {
+        music.obterListaMusica(sessaoUsuario.obterUsuario().obterLogin()).stream().forEach((m) -> {
             lista.add(new String[]{m.obterTitulo(),m.obterArtista()});
         });        
-        
+               
         // Modelo utilizado na Jtable de músicas
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
    
@@ -324,13 +330,17 @@ public class TelaMinhasMusicas {
     /**
      * Trata a seleção de músicas na grade.
      */
-    private void selecionouMusica() {                  
-        //Text Views recebem os valores da musica que é selecionada na tabela
-        txtTitulo.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterTitulo()); 
-        txtArtista.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterArtista());
-        txtAno.setText(Integer.toString(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterAno()));
-        txtGenero.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterGenero());
-        taLetra.setText(sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica().get(tbMusicas.getSelectedRow()).obterLetra());
+    private void selecionouMusica() {        
+        //É usado uma lista auxiliar que recebe somente as musicas do usuario 
+        //atual para preencher os Text Fields
+        List<Musica> lista = new ArrayList<>();       
+        lista = music.obterListaMusica(sessaoUsuario.obterUsuario().obterLogin());
+        
+        txtTitulo.setText(lista.get(tbMusicas.getSelectedRow()).obterTitulo()); 
+        txtArtista.setText(lista.get(tbMusicas.getSelectedRow()).obterArtista());
+        txtAno.setText(Integer.toString(lista.get(tbMusicas.getSelectedRow()).obterAno()));
+        txtGenero.setText(lista.get(tbMusicas.getSelectedRow()).obterGenero());
+        taLetra.setText(lista.get(tbMusicas.getSelectedRow()).obterLetra());
     }
 
     /**
@@ -356,6 +366,7 @@ public class TelaMinhasMusicas {
             @Override
             public void actionPerformed(ActionEvent e) {
                 novo = false;
+                selecionada = txtTitulo.getText();
                 prepararComponentesEstadoEditouMusica();
             }
         });
@@ -375,7 +386,7 @@ public class TelaMinhasMusicas {
                             Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
                         } else {
                             // chama o método editar musica da MúsicaDAOLista
-                            gerenciadorMusicas.alterarMusica(carregarMusica(),tbMusicas.getSelectedRow());
+                            gerenciadorMusicas.alterarMusica(carregarMusica(),selecionada);
                             Utilidades.msgInformacao(I18N.obterSucessoAlteracaoMusica());
                         }
                     }
@@ -401,7 +412,7 @@ public class TelaMinhasMusicas {
             public void actionPerformed(ActionEvent e) {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoDeletar())) {
                     // chama o método remover musica da MúsicaDAOLista
-                    gerenciadorMusicas.removerMusica(tbMusicas.getSelectedRow());
+                    gerenciadorMusicas.removerMusica(txtTitulo.getText());
                     Utilidades.msgInformacao(I18N.obterSucessoRemocaoMusica());
                     atualizaTabela();
                 }
@@ -455,13 +466,15 @@ public class TelaMinhasMusicas {
                     txtArtista.getText(),
                     0,
                     txtGenero.getText(),
-                    taLetra.getText());
+                    taLetra.getText(),
+                    sessaoUsuario.obterUsuario().obterLogin());
             } else {
                 return new Musica(txtTitulo.getText(),
                     txtArtista.getText(),
                     Integer.parseInt(txtAno.getText()),
                     txtGenero.getText(),
-                    taLetra.getText());
+                    taLetra.getText(),
+                    sessaoUsuario.obterUsuario().obterLogin());
             }
                 } catch (Exception ex) {
                 return null;                

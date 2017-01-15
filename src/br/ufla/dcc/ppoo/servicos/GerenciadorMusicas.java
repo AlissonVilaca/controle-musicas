@@ -1,5 +1,6 @@
 package br.ufla.dcc.ppoo.servicos;
 
+import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
@@ -14,7 +15,9 @@ public class GerenciadorMusicas {
     
     // atributo utilizado para podermos manipular a lista de músicas do usuário
     // logado atualmente
-    private SessaoUsuario sessaoUsuario;
+    private final SessaoUsuario sessaoUsuario;
+    // objeto usado para recuperar a lista de musicas 
+    private final MusicaDAOLista music ; 
     
     /**
      * Constrói o gerenciador de musicas do usuário logado, inicializando as 
@@ -22,6 +25,7 @@ public class GerenciadorMusicas {
      */
     public GerenciadorMusicas(){
         sessaoUsuario = SessaoUsuario.obterInstancia();
+        music = MusicaDAOLista.obterInstancia();
     }
     
     /**
@@ -30,12 +34,12 @@ public class GerenciadorMusicas {
      * @param musica Música a ser cadastrada.
      * @throws Exception Exceção gerada caso a música já esteja cadastrada.
      */
-    public void cadastrarMusica(Musica musica) throws Exception{
-        boolean ret = sessaoUsuario.obterUsuario().obterMusicas().comparaMusicas(musica, sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica());
+    public void cadastrarMusica(Musica musica) throws Exception{                
+        boolean ret = music.comparaMusicas(musica);
         if (ret) {
             throw new Exception(I18N.obterErroMusicaJaCadastrada());
         } else {
-            sessaoUsuario.obterUsuario().obterMusicas().adicionarMusica(musica);
+            music.adicionarMusica(musica);
         }                
     }
     
@@ -43,23 +47,29 @@ public class GerenciadorMusicas {
      * Altera uma música passada no sistema
      * 
      * @param musica Música que será alterada
-     * @param indice Índice da ḿúsica da lista
+     * @param selecionada Nome da musica a ser alterada.
      * @throws Exception Exceção gerada caso a música nova já exista na lista
      */
-    public void alterarMusica(Musica musica, int indice) throws Exception{        
-        boolean ret = sessaoUsuario.obterUsuario().obterMusicas().comparaMusicas(musica, sessaoUsuario.obterUsuario().obterMusicas().obterListaMusica());
-        if (ret) {
-            throw new Exception(I18N.obterErroMusicaJaCadastrada());
-        } else { 
-           sessaoUsuario.obterUsuario().obterMusicas().editarMusica(musica, indice);                        
-        }          
+    public void alterarMusica(Musica musica, String selecionada) throws Exception{        
+        if (musica.obterTitulo().equals(selecionada)){
+             music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario().obterLogin());
+        }else{
+            boolean ret = music.comparaMusicas(musica);
+            if (ret) {
+                throw new Exception(I18N.obterErroMusicaJaCadastrada());
+            } else { 
+               music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario().obterLogin());
+               //sessaoUsuario.obterUsuario().obterMusicas().editarMusica(musica, indice);                        
+            }   
+        }
     }        
     
     /**
      * Remove uma música passada no sistema
-     * @param indice Índice da lista referente a música a ser removida
+     * @param titulo Titulo da música a ser removida
      */
-    public void removerMusica(int indice){
-        sessaoUsuario.obterUsuario().obterMusicas().deletarMusica(indice);
+    public void removerMusica(String titulo){
+        music.deletarMusica(titulo,sessaoUsuario.obterUsuario().obterLogin());
+       // sessaoUsuario.obterUsuario().obterMusicas().deletarMusica(indice);
     }    
 }

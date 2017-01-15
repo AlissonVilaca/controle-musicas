@@ -1,6 +1,8 @@
 package br.ufla.dcc.ppoo.dao.lista;
+import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /** 
@@ -8,41 +10,64 @@ import java.util.List;
  *
  * @author alisson-vilaca
  */
-public class MusicaDAOLista {    
+public class MusicaDAOLista implements MusicaDAO{    
+    
+    // instância única da classe (Padrão de Projeto Singleton)
+    private static MusicaDAOLista instancia;
     
     // lista em em memória das musicas de um usuario cadastradas
-    private List<Musica> listaMusica;
+    private final List<Musica> listaMusica;
 
    /**
-    * Constrói o objeto lista de musicas
+    * Constrói o objeto lista de musicas. 
+    * 
+    * @param auxiliar Envio um parâmetro para que o este 
+    * construtor seja chamado quando o método obterInstancia é usado. Não 
+    * encontrei uma forma de chamar este construtor de outra maneira.
     */ 
-    public MusicaDAOLista(){
+    public MusicaDAOLista(String auxiliar){
         listaMusica = new ArrayList<Musica>();                
     }
      
     /**
+     * Retorna a instância única da classe (Padrão de Projeto Singleton)
+     * 
+     * @return A instância única da classe
+     */
+    public static MusicaDAOLista obterInstancia() {
+        if (instancia == null) {
+            instancia = new MusicaDAOLista("auxiliar");
+        }
+        return instancia;
+    }
+    
+    /**
      * Retorna a lista de músicas do usuário 
      * 
+     * @param login
      * @return lista de musicas do usuário
      */
-    public List<Musica> obterListaMusica() {
-        return listaMusica;
+    public List<Musica> obterListaMusica(String login) {
+       List<Musica> lista = new ArrayList<>() ;
+        for (Musica u : listaMusica) {
+            if (u.obterUsuario().equals(login)) {
+                lista.add(u);
+            }
+        }        
+        return lista;
     }        
     
     /**
      * Faz a verificação se a música já está na lista do usuário atual
      * 
      * @param musica Musica a ser verificada
-     * @param lista Lista de músicas do usuário atual
-     * @return 
+     * @return true para musicas com titulo e login iguais
      */
-    public boolean comparaMusicas (Musica musica, List<Musica> lista){
-        for (Musica u : lista) {
+    @Override
+    public boolean comparaMusicas (Musica musica){
+        for (Musica u : listaMusica) {
             if ((musica.obterTitulo().equals(u.obterTitulo()))
-                    && (musica.obterAno() == u.obterAno()) 
-                    && (musica.obterArtista().equals(u.obterArtista())) 
-                    && (musica.obterGenero().equals(u.obterTitulo()))
-                    && (musica.obterLetra().equals(u.obterLetra()))
+                    && (musica.obterUsuario().equals(u.obterUsuario()))                     
                     ) {
                 return true;
             }
@@ -55,7 +80,7 @@ public class MusicaDAOLista {
      * 
      * @param musica Musica que será adicionada na lista
      */
-//    @Override
+    @Override
     public void adicionarMusica(Musica musica) {
         listaMusica.add(musica);
     }
@@ -64,19 +89,35 @@ public class MusicaDAOLista {
      * Edita os dados de uma musica recebida
      * 
      * @param musica Musica a ser alterada
-     * @param indice Índice da música na lista
+     * @param selecionada NOme da musica que será alterada
+     * @param login login do usuario atual
      */
-    public void editarMusica(Musica musica, int indice) {
-        listaMusica.set(indice, musica);        
+    @Override
+    public void editarMusica(Musica musica, String selecionada, String login) {       
+        int indice = 0;
+        for (Musica u : listaMusica) {
+            if (u.obterTitulo().equals(selecionada) && (u.obterUsuario().equals(login))){
+                listaMusica.set(indice, musica);        
+            }
+            indice ++;
+        }
     }
     
     /**
      * Deleta uma musica recebida
      * 
-     * @param indice Índice da música na lista de músicas do usuário
+     * @param titulo Titulo da música que será removida
+     * @param login Login do usuario atual
      */
-    public void deletarMusica(int indice) {
-        listaMusica.remove(indice);
+    @Override
+    public void deletarMusica(String titulo, String login) {
+        //Tive que usar o iterator para que não ocorresse o erro ConcurrentModificationException
+        for (Iterator<Musica> i = listaMusica.iterator(); i.hasNext();) {
+          Musica u = i.next();
+          if (u.obterTitulo().equals(titulo)&& (u.obterUsuario().equals(login))) {
+            i.remove();
+          }
+        }
     }        
     
 }

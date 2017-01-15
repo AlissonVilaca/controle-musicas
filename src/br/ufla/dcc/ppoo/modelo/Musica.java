@@ -15,6 +15,8 @@ public class Musica {
     private String genero;
     // Letra da música
     private String letra;
+    // Usuario a quem a música pertencem
+    private String usuario;
     
     /**
      * Constrói uma música a partir de todos seus atributos.
@@ -24,20 +26,16 @@ public class Musica {
      * @param ano
      * @param genero 
      * @param letra 
+     * @param usuario Usuario a que a musica pertence
      */
-    public Musica(String titulo, String artista, int ano, String genero, String letra){
+    public Musica(String titulo, String artista, int ano, String genero, String letra, String usuario){
         this.titulo = titulo;        
         this.artista = artista;
         this.ano = ano;
         this.genero = genero;    
         this.letra = letra;  
+        this.usuario = usuario;
     }
-
-    /**
-     * Constrói música em branco, apenas para ser usada como
-     * objeto de manipulação
-     */
-    public Musica() {}
 
     /**
      * Método utilizado para obter o título da música
@@ -82,6 +80,15 @@ public class Musica {
      */
     public String obterLetra() {
         return letra;
+    } 
+    
+    /**
+     * Método utilizado para obter o usuário que contém a música
+     * 
+     * @return Usuario da música
+     */
+    public String obterUsuario() {
+        return usuario;
     } 
     
 }
