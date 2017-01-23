@@ -1,6 +1,5 @@
 package br.ufla.dcc.ppoo.gui;
 
-import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.modelo.Musica;
@@ -40,8 +39,6 @@ public class TelaMinhasMusicas {
     private final TelaPrincipal telaPrincipal;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
- //   // objeto usado para recuperar a lista de músicas
- //   private final MusicaDAOLista music;// tela não pode conhecer base de dados, terei que usar  gerenciador musicas ara olbter essa lista. A tela pede pro gerenciador que pede pro ListaMusicaDAO
     // referência para o gerenciador de músicas
     private final GerenciadorMusicas gerenciadorMusicas;
     // variavel para controle do botão salvar;
@@ -80,7 +77,6 @@ public class TelaMinhasMusicas {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorMusicas = new GerenciadorMusicas();
-        //    music = MusicaDAOLista.obterInstancia();
     }
 
     /**

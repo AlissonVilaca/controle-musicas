@@ -6,6 +6,7 @@ import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +21,8 @@ public class GerenciadorMusicas {
     // logado atualmente
     private final SessaoUsuario sessaoUsuario;
     // objeto usado para recuperar a lista de musicas 
-    private final MusicaDAO music ; //ao invéz de o bjeto ser MusicaDAOLista é MusicaDAO, por que dessa forma eu consig usar o 
-                                    //polimofismo, além de ficar mais fácil caso eu comece a usar um banco de dados por exemplo
+    private final MusicaDAO music ; 
+    
     /**
      * Constrói o gerenciador de musicas do usuário logado, inicializando as 
      * camadas de acesso.
@@ -82,5 +83,13 @@ public class GerenciadorMusicas {
      */
     public List<Musica> obterLista(Usuario login) {        
         return music.obterListaMusica(login);
+    }
+    
+    public void marcar(Musica u, Usuario login){
+        music.marcar(u,login);
+    }
+    
+    public List<Musica> obterSelecionadas() {
+        return music.obterSelecionadas();        
     }
 }

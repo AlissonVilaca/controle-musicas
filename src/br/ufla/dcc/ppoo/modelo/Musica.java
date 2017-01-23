@@ -17,7 +17,9 @@ public class Musica {
     private String letra;
     // Usuario a quem a música pertencem
     private Usuario usuario;// Alterei esse atributo de String para Usuario, faz mais senido para a orientação à objeto
-        
+    
+    private boolean marcada;
+    
     /**
      * Constrói uma música a partir de todos seus atributos.
      * 
@@ -35,6 +37,7 @@ public class Musica {
         this.genero = genero;    
         this.letra = letra;  
         this.usuario = usuario;
+        marcada = false;
     }
 
     /**
@@ -129,5 +132,17 @@ public class Musica {
         } else {            
             return false;
         }        
+    }
+    
+    public void marcar(){
+        marcada = true;
+    }
+    
+    public void desmarcar(){
+        marcada = false;
+    }
+    
+    public boolean estaMarcada(){
+        return marcada;
     }
 }

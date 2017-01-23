@@ -29,6 +29,8 @@ public class TelaPrincipal {
     private final TelaCadastroUsuario telaCadastroUsuario;
     // tela de gestão das músicas
     private final TelaMinhasMusicas telaMinhasMusicas;
+    // tela de gestão das playlists
+    private final TelaMinhasPlaylists telaMinhasPlaylists;
 
     // janela da tela principal
     private JFrame janela;
@@ -50,7 +52,7 @@ public class TelaPrincipal {
     // Itens de menu específicos para usuários logados no sistema    
     private JMenuItem menuLogout;
     private JMenuItem menuMinhasMusicas;
-    private JMenuItem menuListasMusicas;
+    private JMenuItem menuMinhasPlaylists;
     
 
     /**
@@ -61,6 +63,7 @@ public class TelaPrincipal {
         telaCadastroUsuario = new TelaCadastroUsuario(this);
         telaMinhasMusicas = new TelaMinhasMusicas(this);
         sessaoUsuario = SessaoUsuario.obterInstancia();
+        telaMinhasPlaylists = new TelaMinhasPlaylists(this);
     }
 
     /**
@@ -128,10 +131,10 @@ public class TelaPrincipal {
             }
         });
         
-        menuListasMusicas.addActionListener(new ActionListener() {
+        menuMinhasPlaylists.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                telaMinhasMusicas.inicializar();
+                telaMinhasPlaylists.inicializar();
             }
         });
 
@@ -169,7 +172,7 @@ public class TelaPrincipal {
         menuCadastrarUsuario = new JMenuItem(I18N.obterMenuCadastrarUsuario(), GerenciadorDeImagens.CADASTRAR_USUARIO);
         menuLogout = new JMenuItem(I18N.obterMenuLogout(), GerenciadorDeImagens.LOGOUT);
         menuMinhasMusicas = new JMenuItem(I18N.obterMenuMinhasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
-        menuListasMusicas = new JMenuItem(I18N.obterMenuListasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
+        menuMinhasPlaylists = new JMenuItem(I18N.obterMenuListasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
 
         if (!sessaoUsuario.estahLogado()) {
             menuInicio.add(menuEntrar);
@@ -178,7 +181,7 @@ public class TelaPrincipal {
             // Aqui você poderá adicionar outros itens de menu, se necessário.
 
             menuInicio.add(menuMinhasMusicas);
-            menuInicio.add(menuListasMusicas);
+            menuInicio.add(menuMinhasPlaylists);
             menuInicio.add(menuLogout);
             
         }

@@ -38,6 +38,24 @@ public class I18N {
     public static String obterNomeDoSistema() {
         return rb.getString("sistema.nome");
     }
+    
+    /**
+     * Retorna o nome do sistema.
+     *
+     * @return Nome do sistema.
+     */
+    public static String obterRotuloPalavraChave() {
+        return rb.getString("tela.minhasplaylists.palavra");
+    }
+    
+    /**
+     * Retorna o nome do sistema.
+     *
+     * @return Nome do sistema.
+     */
+    public static String obterRotuloMusicas() {
+        return rb.getString("tela.minhasplaylists.musicas");
+    }
 
     /**
      * Retorna o texto do menu Início.
@@ -343,6 +361,15 @@ public class I18N {
     public static String obterTituloTelaMinhasMusicas() {
         return rb.getString("tela.minhasmusicas.titulo");
     }
+    
+    /**
+     * Retorna o título da tela de Minhas Músicas.
+     *
+     * @return Título da tela de Minhas Músicas.
+     */
+    public static String obterTituloTelaMinhasPlaylists() {
+        return rb.getString("tela.minhasplaylists.titulo");
+    }
 
     /**
      * Retorna o título da tela de Cadastro de Usuários.
@@ -379,7 +406,34 @@ public class I18N {
     public static String obterBotaoEntrar() {
         return rb.getString("botao.entrar");
     }
-
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoAdicionar() {
+        return rb.getString("botao.adicionar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoNova() {
+        return rb.getString("botao.nova");
+    }   
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoExcluir() {
+        return rb.getString("botao.excluir");
+    } 
+    
     /**
      * Retorna o texto do botão Cancelar.
      *
@@ -442,6 +496,15 @@ public class I18N {
     public static String obterRotuloMusicaTitulo() {
         return rb.getString("rotulo.musica.titulo");
     }
+    
+    /**
+     * Retorna o texto do rótulo título da música.
+     *
+     * @return Texto do rótulo título da música.
+     */
+    public static String obterRotuloNome() {
+        return rb.getString("rotulo.playlist.nomes");
+    }
 
     /**
      * Retorna o texto do rótulo artista da música.
@@ -459,6 +522,15 @@ public class I18N {
      */
     public static String obterRotuloMusicaAno() {
         return rb.getString("rotulo.musica.ano");
+    }
+    
+    /**
+     * Retorna o texto do rótulo ano da música.
+     *
+     * @return Texto do rótulo ano da música.
+     */
+    public static String obterRotuloNovaPalavra() {
+        return rb.getString("rotulo.playlist.palavra");
     }
 
     /**
@@ -486,5 +558,23 @@ public class I18N {
      */
     public static String obterRotuloUsuarioConfirmarSenha() {
         return rb.getString("rotulo.usuario.confirmar_senha");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterRotuloNomePlaylist() {
+        return rb.getString("rotulo.playlist.nome");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterRotuloAutor() {
+        return rb.getString("rotulo.playlist.autor");
     }
 }

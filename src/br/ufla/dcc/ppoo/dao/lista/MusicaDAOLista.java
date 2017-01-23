@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /** 
- * Implementação da lista de músicas, que é um atributo da Classe Usuário
+ * Implementação da lista de músicas, que é um atributo da Classe Musica
  *
  * @author alisson-vilaca
  */
@@ -121,6 +121,24 @@ public class MusicaDAOLista implements MusicaDAO{
             i.remove();
           }
         }
-    }        
+    }      
     
+    public void marcar(Musica u, Usuario login) {
+        for (Musica m : listaMusica) {
+            if (u == m && m.obterUsuario() == login) {
+                m.marcar();
+            }            
+        }
+    }
+    
+    public List<Musica> obterSelecionadas() {
+        List<Musica> m = new ArrayList<>();
+        for (Musica u : listaMusica) {
+            if (u.estaMarcada()){
+                m.add(u);
+                u.desmarcar();
+            }
+        }
+        return m;
+    }
 }
