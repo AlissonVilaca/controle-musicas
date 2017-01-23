@@ -74,6 +74,15 @@ public class I18N {
     public static String obterMenuMinhasMusicas() {
         return rb.getString("menu.inicio.minhas_musicas");
     }
+    
+    /**
+     * Retorna o texto do menu Minhas Músicas.
+     *
+     * @return Texto do menu Minhas Músicas.
+     */
+    public static String obterMenuListasMusicas() {
+        return rb.getString("menu.inicio.listas_musicas");
+    }
 
     /**
      * Retorna o texto do menu Cadastrar Usuário.
@@ -241,8 +250,8 @@ public class I18N {
      *
      * @return Texto da mensagem de ano inválido.
      */
-    public static String obterErroTituloInvalido() {
-        return rb.getString("erro.musica.titulo_invalido");
+    public static String obterErroValorInvalido() {
+        return rb.getString("erro.musica.valor_invalido");
     }
     
     /**

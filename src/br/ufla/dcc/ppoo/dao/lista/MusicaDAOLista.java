@@ -1,6 +1,7 @@
 package br.ufla.dcc.ppoo.dao.lista;
 import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +26,7 @@ public class MusicaDAOLista implements MusicaDAO{
     * construtor seja chamado quando o método obterInstancia é usado. Não 
     * encontrei uma forma de chamar este construtor de outra maneira.
     */ 
-    public MusicaDAOLista(String auxiliar){
+    private MusicaDAOLista(String auxiliar){
         listaMusica = new ArrayList<Musica>();                
     }
      
@@ -47,10 +48,10 @@ public class MusicaDAOLista implements MusicaDAO{
      * @param login
      * @return lista de musicas do usuário
      */
-    public List<Musica> obterListaMusica(String login) {
+    public List<Musica> obterListaMusica(Usuario login) {
        List<Musica> lista = new ArrayList<>() ;
         for (Musica u : listaMusica) {
-            if (u.obterUsuario().equals(login)) {
+            if (u.obterUsuario() == login) {
                 lista.add(u);
             }
         }        
@@ -66,11 +67,9 @@ public class MusicaDAOLista implements MusicaDAO{
     @Override
     public boolean comparaMusicas (Musica musica){
         for (Musica u : listaMusica) {
-            if ((musica.obterTitulo().equals(u.obterTitulo()))
-                    && (musica.obterUsuario().equals(u.obterUsuario()))                     
-                    ) {
-                return true;
-            }
+            if(musica.comparaMusicas(u)){
+                return true;                
+            }            
         }        
         return false;
     }
@@ -93,13 +92,17 @@ public class MusicaDAOLista implements MusicaDAO{
      * @param login login do usuario atual
      */
     @Override
-    public void editarMusica(Musica musica, String selecionada, String login) {       
+    public void editarMusica(Musica musica, String selecionada, Usuario login) {       
         int indice = 0;
         for (Musica u : listaMusica) {
-            if (u.obterTitulo().equals(selecionada) && (u.obterUsuario().equals(login))){
-                listaMusica.set(indice, musica);        
+            if (u.obterTitulo().equals(selecionada) && (u.obterUsuario() == login)){
+                u.setAno(musica.obterAno());
+                u.setArtista(musica.obterArtista());
+                u.setGenero(musica.obterGenero());
+                u.setTitulo(musica.obterTitulo());
+                u.setUsuario(musica.obterUsuario());
+                u.setLetra(musica.obterLetra());
             }
-            indice ++;
         }
     }
     
@@ -109,12 +112,12 @@ public class MusicaDAOLista implements MusicaDAO{
      * @param titulo Titulo da música que será removida
      * @param login Login do usuario atual
      */
-    @Override
-    public void deletarMusica(String titulo, String login) {
+  //  @Override
+    public void deletarMusica(String titulo, Usuario login) {
         //Tive que usar o iterator para que não ocorresse o erro ConcurrentModificationException
         for (Iterator<Musica> i = listaMusica.iterator(); i.hasNext();) {
           Musica u = i.next();
-          if (u.obterTitulo().equals(titulo)&& (u.obterUsuario().equals(login))) {
+          if (u.obterTitulo().equals(titulo) && (u.obterUsuario() == login)) {
             i.remove();
           }
         }

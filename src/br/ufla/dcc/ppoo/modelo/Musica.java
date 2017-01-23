@@ -16,8 +16,8 @@ public class Musica {
     // Letra da música
     private String letra;
     // Usuario a quem a música pertencem
-    private String usuario;
-    
+    private Usuario usuario;// Alterei esse atributo de String para Usuario, faz mais senido para a orientação à objeto
+        
     /**
      * Constrói uma música a partir de todos seus atributos.
      * 
@@ -28,7 +28,7 @@ public class Musica {
      * @param letra 
      * @param usuario Usuario a que a musica pertence
      */
-    public Musica(String titulo, String artista, int ano, String genero, String letra, String usuario){
+    public Musica(String titulo, String artista, int ano, String genero, String letra, Usuario usuario){
         this.titulo = titulo;        
         this.artista = artista;
         this.ano = ano;
@@ -87,8 +87,47 @@ public class Musica {
      * 
      * @return Usuario da música
      */
-    public String obterUsuario() {
+    public Usuario obterUsuario() {
         return usuario;
     } 
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setArtista(String artista) {
+        this.artista = artista;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }     
     
+    /**
+     * Faz a verificação se a música já está na lista do usuário atual
+     * 
+     * @param musica Musica a ser verificada
+     * @return true para musicas com titulo e login iguais
+     */
+    public boolean comparaMusicas (Musica u){
+        if ((titulo.equals(u.obterTitulo()))      // este if deveria estar na classe musica, nã cabe ao if fazer
+                             && (usuario == u.obterUsuario())//essa cmparação
+                    ) {
+            return true;
+        } else {            
+            return false;
+        }        
+    }
 }

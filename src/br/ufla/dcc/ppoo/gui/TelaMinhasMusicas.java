@@ -40,8 +40,8 @@ public class TelaMinhasMusicas {
     private final TelaPrincipal telaPrincipal;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
-    // objeto usado para recuperar a lista de músicas
-    private final MusicaDAOLista music;       
+ //   // objeto usado para recuperar a lista de músicas
+ //   private final MusicaDAOLista music;// tela não pode conhecer base de dados, terei que usar  gerenciador musicas ara olbter essa lista. A tela pede pro gerenciador que pede pro ListaMusicaDAO
     // referência para o gerenciador de músicas
     private final GerenciadorMusicas gerenciadorMusicas;
     // variavel para controle do botão salvar;
@@ -80,7 +80,7 @@ public class TelaMinhasMusicas {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorMusicas = new GerenciadorMusicas();
-        music = MusicaDAOLista.obterInstancia();
+        //    music = MusicaDAOLista.obterInstancia();
     }
 
     /**
@@ -105,7 +105,7 @@ public class TelaMinhasMusicas {
         List<String[]> lista = new ArrayList<>();
         
         // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
-        music.obterListaMusica(sessaoUsuario.obterUsuario().obterLogin()).stream().forEach((m) -> {
+        gerenciadorMusicas.obterLista(sessaoUsuario.obterUsuario()).stream().forEach((m) -> {
             lista.add(new String[]{m.obterTitulo(),m.obterArtista()});
         });        
                
@@ -334,13 +334,14 @@ public class TelaMinhasMusicas {
         //É usado uma lista auxiliar que recebe somente as musicas do usuario 
         //atual para preencher os Text Fields
         List<Musica> lista = new ArrayList<>();       
-        lista = music.obterListaMusica(sessaoUsuario.obterUsuario().obterLogin());
+        lista = gerenciadorMusicas.obterLista(sessaoUsuario.obterUsuario());
         
-        txtTitulo.setText(lista.get(tbMusicas.getSelectedRow()).obterTitulo()); 
-        txtArtista.setText(lista.get(tbMusicas.getSelectedRow()).obterArtista());
-        txtAno.setText(Integer.toString(lista.get(tbMusicas.getSelectedRow()).obterAno()));
-        txtGenero.setText(lista.get(tbMusicas.getSelectedRow()).obterGenero());
-        taLetra.setText(lista.get(tbMusicas.getSelectedRow()).obterLetra());
+        Musica m = lista.get(tbMusicas.getSelectedRow());// Eu estava psquisand na lista uma vez paa cada campo prenchido, dessa                 
+        txtTitulo.setText(m.obterTitulo());              // forma atual eu pesquiso na lista uma vez só
+        txtArtista.setText(m.obterArtista());
+        txtAno.setText(Integer.toString(m.obterAno()));
+        txtGenero.setText(m.obterGenero());
+        taLetra.setText(m.obterLetra());
     }
 
     /**
@@ -374,19 +375,23 @@ public class TelaMinhasMusicas {
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{                                         
-                    if (carregarMusica() == null){  //Faz o tratamento de erro caso seja inserido um ano inválido           
+                Musica mus = carregarMusica();  
+                try{                                                    
+                    if (mus == null){  //Faz o tratamento de erro caso seja inserido um ano inválido           
                         throw new Exception(I18N.obterErroAnoInvalido());
-                    } else if(carregarMusica().obterTitulo().equals("")){   //faz o tratamento de erros caso o titulo esteja em branco
-                        throw new Exception(I18N.obterErroTituloInvalido());
+                    } else if(  mus.obterTitulo().equals("") || 
+                                mus.obterArtista().equals("") ||
+                                mus.obterGenero().equals("") ||
+                                mus.obterAno() == 0){   //faz o tratamento de erros caso o algum campo esteja em branco
+                        throw new Exception(I18N.obterErroValorInvalido());
                     } else{ 
                         if (novo){
                             // chama o método adicionar musica da MúsicaDAOLista
-                            gerenciadorMusicas.cadastrarMusica(carregarMusica());
+                            gerenciadorMusicas.cadastrarMusica(mus);
                             Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
                         } else {
                             // chama o método editar musica da MúsicaDAOLista
-                            gerenciadorMusicas.alterarMusica(carregarMusica(),selecionada);
+                            gerenciadorMusicas.alterarMusica(mus,selecionada);
                             Utilidades.msgInformacao(I18N.obterSucessoAlteracaoMusica());
                         }
                     }
@@ -467,14 +472,14 @@ public class TelaMinhasMusicas {
                     0,
                     txtGenero.getText(),
                     taLetra.getText(),
-                    sessaoUsuario.obterUsuario().obterLogin());
+                    sessaoUsuario.obterUsuario());
             } else {
                 return new Musica(txtTitulo.getText(),
                     txtArtista.getText(),
                     Integer.parseInt(txtAno.getText()),
                     txtGenero.getText(),
                     taLetra.getText(),
-                    sessaoUsuario.obterUsuario().obterLogin());
+                    sessaoUsuario.obterUsuario());
             }
                 } catch (Exception ex) {
                 return null;                

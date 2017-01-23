@@ -1,9 +1,12 @@
 package br.ufla.dcc.ppoo.servicos;
 
+import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import java.util.List;
 
 /**
  * Classe que representa a camada de negócios de cadastro de músicas. Permite
@@ -17,8 +20,8 @@ public class GerenciadorMusicas {
     // logado atualmente
     private final SessaoUsuario sessaoUsuario;
     // objeto usado para recuperar a lista de musicas 
-    private final MusicaDAOLista music ; 
-    
+    private final MusicaDAO music ; //ao invéz de o bjeto ser MusicaDAOLista é MusicaDAO, por que dessa forma eu consig usar o 
+                                    //polimofismo, além de ficar mais fácil caso eu comece a usar um banco de dados por exemplo
     /**
      * Constrói o gerenciador de musicas do usuário logado, inicializando as 
      * camadas de acesso.
@@ -52,14 +55,13 @@ public class GerenciadorMusicas {
      */
     public void alterarMusica(Musica musica, String selecionada) throws Exception{        
         if (musica.obterTitulo().equals(selecionada)){
-             music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario().obterLogin());
+             music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario());
         }else{
             boolean ret = music.comparaMusicas(musica);
             if (ret) {
                 throw new Exception(I18N.obterErroMusicaJaCadastrada());
             } else { 
-               music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario().obterLogin());
-               //sessaoUsuario.obterUsuario().obterMusicas().editarMusica(musica, indice);                        
+               music.editarMusica(musica, selecionada, sessaoUsuario.obterUsuario());                       
             }   
         }
     }        
@@ -69,7 +71,16 @@ public class GerenciadorMusicas {
      * @param titulo Titulo da música a ser removida
      */
     public void removerMusica(String titulo){
-        music.deletarMusica(titulo,sessaoUsuario.obterUsuario().obterLogin());
-       // sessaoUsuario.obterUsuario().obterMusicas().deletarMusica(indice);
+        music.deletarMusica(titulo,sessaoUsuario.obterUsuario());
     }    
+    
+    /**
+     * Retorna a lista de músicas do usuário 
+     * 
+     * @param login
+     * @return lista de musicas do usuário
+     */
+    public List<Musica> obterLista(Usuario login) {        
+        return music.obterListaMusica(login);
+    }
 }

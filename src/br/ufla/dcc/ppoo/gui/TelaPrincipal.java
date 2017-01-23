@@ -50,6 +50,8 @@ public class TelaPrincipal {
     // Itens de menu específicos para usuários logados no sistema    
     private JMenuItem menuLogout;
     private JMenuItem menuMinhasMusicas;
+    private JMenuItem menuListasMusicas;
+    
 
     /**
      * Construtor; incializa as demais telas e sessão de usuário.
@@ -125,6 +127,13 @@ public class TelaPrincipal {
                 telaMinhasMusicas.inicializar();
             }
         });
+        
+        menuListasMusicas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                telaMinhasMusicas.inicializar();
+            }
+        });
 
         menuCadastrarUsuario.addActionListener(new ActionListener() {
             @Override
@@ -160,6 +169,7 @@ public class TelaPrincipal {
         menuCadastrarUsuario = new JMenuItem(I18N.obterMenuCadastrarUsuario(), GerenciadorDeImagens.CADASTRAR_USUARIO);
         menuLogout = new JMenuItem(I18N.obterMenuLogout(), GerenciadorDeImagens.LOGOUT);
         menuMinhasMusicas = new JMenuItem(I18N.obterMenuMinhasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
+        menuListasMusicas = new JMenuItem(I18N.obterMenuListasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
 
         if (!sessaoUsuario.estahLogado()) {
             menuInicio.add(menuEntrar);
@@ -168,7 +178,9 @@ public class TelaPrincipal {
             // Aqui você poderá adicionar outros itens de menu, se necessário.
 
             menuInicio.add(menuMinhasMusicas);
+            menuInicio.add(menuListasMusicas);
             menuInicio.add(menuLogout);
+            
         }
 
         menuSair = new JMenuItem(I18N.obterMenuSair(), GerenciadorDeImagens.SAIR);

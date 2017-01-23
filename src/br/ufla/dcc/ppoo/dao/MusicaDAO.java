@@ -6,6 +6,8 @@
 package br.ufla.dcc.ppoo.dao;
 
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Usuario;
+import java.util.List;
 
 /**
  *
@@ -36,7 +38,7 @@ public interface MusicaDAO {
      * @param selecionada NOme da musica que será alterada
      * @param login login do usuario atual
      */
-    public void editarMusica(Musica musica, String selecionada, String login);
+    public void editarMusica(Musica musica, String selecionada, Usuario login);
     
     /**
      * Deleta uma musica recebida
@@ -44,6 +46,14 @@ public interface MusicaDAO {
      * @param titulo Titulo da música que será removida
      * @param login Login do usuario atual
      */
-    public void deletarMusica(String titulo, String login);
-    
+    public void deletarMusica(String titulo, Usuario login);
+        
+    /**
+     * Retorna a lista de músicas do usuário 
+     * 
+     * @param login
+     * @return lista de musicas do usuário
+     */
+    public List<Musica> obterListaMusica(Usuario login);
+
 }
