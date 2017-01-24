@@ -2,11 +2,9 @@ package br.ufla.dcc.ppoo.gui;
 
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
-import br.ufla.dcc.ppoo.modelo.Musica;
-import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
-import br.ufla.dcc.ppoo.util.Utilidades;
+import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -19,20 +17,18 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Tela de Edição de palavras-chave de uma playlist
  * @author aluno
  */
-public class TelaSelecaoMusicas {
-
+public class TelaEditarPalavra {
+  
     // referência para a tela principal
     private final TelaPrincipal telaPrincipal;
             
@@ -40,15 +36,15 @@ public class TelaSelecaoMusicas {
     private JDialog janela;
     private GridBagLayout layout;
     private GridBagConstraints gbc;
-    private JLabel lbLogin;
-    private JLabel lbSenha;
-    private JTextField txtLogin;
-    private JPasswordField txtSenha;
+    private JTextField txtPalavra;
     private JButton btnEntrar;
+    private JButton btnExcluir;
     private JButton btnCancelar;
     
     // referência para o gerenciador de músicas
     private final GerenciadorMusicas gerenciadorMusicas;
+    // referência para o gerenciador de playlists
+    private final GerenciadorPlaylists gerenciadorPlaylist;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
     
@@ -60,11 +56,11 @@ public class TelaSelecaoMusicas {
      * 
      * @param l.
      */
-    public TelaSelecaoMusicas(TelaPrincipal telaPrincipal) {
+    public TelaEditarPalavra(TelaPrincipal telaPrincipal) {
         this.telaPrincipal = telaPrincipal;
         gerenciadorMusicas = new GerenciadorMusicas();
         sessaoUsuario = SessaoUsuario.obterInstancia();
-        
+        gerenciadorPlaylist = new GerenciadorPlaylists();
     }
 
     /**
@@ -82,18 +78,17 @@ public class TelaSelecaoMusicas {
             I18N.obterRotuloMusicaTitulo(),
             I18N.obterRotuloMusicaArtista()
         };
-        // Lista utilizada para preencher a JTable com a lista de músicas do usuário
+        // Lista utilizada para preencher a JTable com a lista de palavras da playlist
         List<String[]> lista = new ArrayList<>();
         
-        // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
-        gerenciadorMusicas.obterLista(sessaoUsuario.obterUsuario()).stream().forEach((m) -> {
-            lista.add(new String[]{m.obterTitulo(),m.obterArtista()});
+        // Adiciona o palavra lista de preenchimento da Jtable
+         gerenciadorPlaylist.obterPlaylistTemporaria().getPalavras().stream().forEach((m) -> {
+            lista.add(new String[]{m});
         });        
                
-        // Modelo utilizado na Jtable de músicas
+        // Modelo utilizado na Jtable de palavras
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
    
-        // JTable recebe o modelo criado, com a listas de músicas do usuário
         tbMusicas = new JTable();
         tbMusicas.setModel(model);
         tbMusicas.setPreferredScrollableViewportSize(new Dimension(300, 70));
@@ -127,54 +122,30 @@ public class TelaSelecaoMusicas {
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
                 0, 0, 4, 1);
+        btnEntrar = new JButton(I18N.obterBotaoAdicionar(),
+                GerenciadorDeImagens.OK);
         
-       /* lbLogin = new JLabel(I18N.obterRotuloUsuarioLogin());
-        adicionarComponente(lbLogin,
-                GridBagConstraints.LINE_END,
-                GridBagConstraints.NONE,
-                0, 0, 1, 1);
-
-        lbSenha = new JLabel(I18N.obterRotuloUsuarioSenha());
-        adicionarComponente(lbSenha,
-                GridBagConstraints.LINE_END,
-                GridBagConstraints.NONE,
-                1, 0, 1, 1);
-
-        txtLogin = new JTextField(25);
-        adicionarComponente(txtLogin,
-                GridBagConstraints.LINE_START,
-                GridBagConstraints.NONE,
-                0, 1, 1, 1);
-
-        txtSenha = new JPasswordField(10);
-        adicionarComponente(txtSenha,
-                GridBagConstraints.LINE_START,
-                GridBagConstraints.NONE,
-                1, 1, 1, 1);*/
-
-        btnEntrar = new JButton(I18N.obterBotaoEntrar(),
+        btnExcluir = new JButton(I18N.obterBotaoExcluir(),
                 GerenciadorDeImagens.OK);
 
         btnCancelar = new JButton(I18N.obterBotaoCancelar(),
                 GerenciadorDeImagens.CANCELAR);
-
+        
+        txtPalavra = new JTextField(20);
+        adicionarComponente(txtPalavra,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.NONE,
+                2, 0, 4, 1);
+        
         JPanel painelBotoes = new JPanel();
         painelBotoes.add(btnEntrar);
+        painelBotoes.add(btnExcluir);
         painelBotoes.add(btnCancelar);
 
         adicionarComponente(painelBotoes,
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
-                2, 0, 2, 1);
-    }
-
-    /**
-     * Retorna um novo usuário a partir do login e senha passados.
-     * 
-     * @return Usuário criado.
-     */
-    private Usuario carregarUsuario() {
-        return new Usuario(txtLogin.getText(), txtSenha.getPassword());
+                3, 0, 2, 1);
     }
 
     /**
@@ -184,19 +155,23 @@ public class TelaSelecaoMusicas {
         btnEntrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    List<Musica> lista = new ArrayList<>();       
-                    lista = gerenciadorMusicas.obterLista(sessaoUsuario.obterUsuario());
+                
+                //gerenciadorPlaylist.obterPlaylistTemporaria().getPalavras().add(txtPalavra.getText());
+                gerenciadorPlaylist.adicionarPalavra(txtPalavra.getText());
+                construirTabela();
+                janela.dispose();
+                inicializar();
+            }
+        });
         
-                    Musica m = lista.get(tbMusicas.getSelectedRow());
-                    gerenciadorMusicas.marcar(m,sessaoUsuario.obterUsuario());
-                    
-                // gerenciadorUsuarios.autenticarUsuario(carregarUsuario());
-                    //telaPrincipal.inicializar();
-                    janela.dispose();
-                } catch (Exception ex) {
-                    Utilidades.msgErro(ex.getMessage());
-                }
+        btnExcluir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               // gerenciadorPlaylist.obterPlaylistTemporaria().getPalavras().remove(tbMusicas.getSelectedRow());
+                gerenciadorPlaylist.removerPalavra(tbMusicas.getSelectedRow());
+                construirTabela();
+                janela.dispose();
+                inicializar();
             }
         });
 

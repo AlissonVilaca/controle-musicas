@@ -1,8 +1,6 @@
 package br.ufla.dcc.ppoo.servicos;
 
-import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.dao.PlaylistDAO;
-import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.dao.lista.PlaylistDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
@@ -11,7 +9,6 @@ import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
 import java.util.ArrayList;
 import java.util.List;
-import sun.nio.cs.ext.GB18030;
 
 /**
  * Classe que representa a camada de negócios de cadastro de playlists. Permite
@@ -81,7 +78,84 @@ public class GerenciadorPlaylists {
     //    return playlist.getPlaylist(login,selecionada).getMusicas();
     }
     
-    public void cadastrarPlaylist(List<String> lista, String nome, Usuario login) {
-        playlist.adicionarPlaylist(lista,nome,login,gerenciadorMusicas.obterSelecionadas());                
+    /**
+     * Cadastra uma playlist
+     * @throws Exception 
+     */
+    public void cadastrarPlaylist() throws Exception {
+        boolean ret = playlist.comparaPlaylist();
+        if (ret) {
+            throw new Exception(I18N.obterErroMusicaJaCadastrada());
+        } else {
+            playlist.adicionarPlaylist(gerenciadorMusicas.obterSelecionadas());         
+        }                       
     }
+    
+    /**
+     * Edita uma playlist
+     * @param selecionada
+     * @param nome
+     * @throws Exception 
+     */
+    public void editarPlaylist(String selecionada,String nome) throws Exception {        
+        playlist.obterPlaylistTemporaria().setNome(nome);
+      /*  System.out.println("NOme:"+playlist.obterPlaylistTemporaria().getNome());
+        for (Musica m : gerenciadorMusicas.obterSelecionadas()){
+            System.out.println(m.obterTitulo());
+        }*/
+        if (playlist.obterPlaylistTemporaria().getNome().equals(selecionada)){
+            playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada);
+            System.out.println("teste1");
+        }else{
+            boolean ret = playlist.comparaPlaylist();
+            if (ret) {
+                throw new Exception(I18N.obterErroMusicaJaCadastrada());
+            } else { 
+                System.out.println("teste2");
+                playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada);                   
+            }   
+        }               
+    }
+    
+    /**
+     * Seta os valores delejados na playlist de edição
+     * @param p 
+     */
+    public void setarEditada(Playlist p){
+        playlist.setarEditada(p);       
+    }
+    
+    /**
+     * Retorna a playlist temporária
+     * @return 
+     */
+    public Playlist obterPlaylistTemporaria (){
+        return playlist.obterPlaylistTemporaria ();
+    }
+    
+    /**
+     * Remove uma música passada no sistema
+     * @param titulo Titulo da música a ser removida
+     */
+    public void removerPlaylist(String titulo){
+        playlist.removerPlaylist(titulo,sessaoUsuario.obterUsuario());
+    } 
+    
+    /**
+     * Remove palavra da lista de palavras da playlist
+     * @param titulo 
+     */
+    public void removerPalavra(int indice){
+        playlist.removerPalavra(indice);
+    }
+    
+    /**
+     * Adiciona palavra da lista de palavras da playlist
+     * @param titulo 
+     */
+    public void adicionarPalavra(String palavra){
+        playlist.adicionarPalavra(palavra);
+    }
+    
+   
 }

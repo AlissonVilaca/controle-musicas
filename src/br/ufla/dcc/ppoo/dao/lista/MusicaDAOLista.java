@@ -1,6 +1,7 @@
 package br.ufla.dcc.ppoo.dao.lista;
 import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,7 +94,6 @@ public class MusicaDAOLista implements MusicaDAO{
      */
     @Override
     public void editarMusica(Musica musica, String selecionada, Usuario login) {       
-        int indice = 0;
         for (Musica u : listaMusica) {
             if (u.obterTitulo().equals(selecionada) && (u.obterUsuario() == login)){
                 u.setAno(musica.obterAno());
@@ -123,6 +123,11 @@ public class MusicaDAOLista implements MusicaDAO{
         }
     }      
     
+    /**
+     * Marca uma musica
+     * @param u
+     * @param login 
+     */
     public void marcar(Musica u, Usuario login) {
         for (Musica m : listaMusica) {
             if (u == m && m.obterUsuario() == login) {
@@ -130,7 +135,23 @@ public class MusicaDAOLista implements MusicaDAO{
             }            
         }
     }
+    /**
+     * Desmarca musicas após serem editadas
+     * @param u
+     * @param login 
+     */
+    public void desmarcar(Musica u, Usuario login) {
+        for (Musica m : listaMusica) {
+            if (u == m && m.obterUsuario() == login) {
+                m.desmarcar();
+            }            
+        }
+    }
     
+    /**
+     * Obtem lista de música marcadas
+     * @return 
+     */
     public List<Musica> obterSelecionadas() {
         List<Musica> m = new ArrayList<>();
         for (Musica u : listaMusica) {
@@ -140,5 +161,96 @@ public class MusicaDAOLista implements MusicaDAO{
             }
         }
         return m;
+    }
+    
+    /**
+     * Retorna a lista de musicas nao marcadas
+     * 
+     * @param login
+     * @return lista de musicas do usuário
+     */
+    public List<Musica> obterListaMusicasNaoMarcadas(Usuario login) {
+       List<Musica> lista = new ArrayList<>() ;
+        for (Musica u : listaMusica) {
+            if (u.obterUsuario() == login && !u.estaMarcada()) {
+                lista.add(u);
+            }
+        }        
+        return lista;
+    } 
+    
+    /**
+     * Retorna a lista de musicas nao marcadas
+     * 
+     * @param login
+     * @return lista de musicas do usuário
+     */
+    public List<Musica> obterListaMusicasMarcadas(Usuario login) {
+       List<Musica> lista = new ArrayList<>() ;
+        for (Musica u : listaMusica) {
+            if (u.obterUsuario() == login && u.estaMarcada()) {
+                lista.add(u);
+            }
+        }        
+        return lista;
+    }
+    
+    /**
+     * obtem índice de determinada musica em uma lista
+     * @param list
+     * @param j
+     * @return 
+     */
+    public int obterIndice(List<Musica> list, String j) {        
+        for (int i = 0; i < list.size(); i++){         
+            if (list.get(i).comparaMusicaComString(j)){
+                return i;
+            }
+        } 
+        return -1;
+    }
+    
+    /**
+     * Marca as musicas de uma playlist para edição
+     * @param p 
+     */
+    public void marcarMusicas (Playlist p){
+        for (Musica m : listaMusica){
+            for (Musica u : p.getMusicas()){
+                if (u.obterTitulo().equals(m.obterTitulo()) && u.obterUsuario() == m.obterUsuario()){
+                    m.marcar();
+                }
+            }            
+        }    
+    } 
+    
+    /**
+     * Desmarca musicas após serem editadas
+     * @param u
+     * @param login 
+     */
+    public void desmarcarMusicas (){
+        for (Musica m : listaMusica){
+            m.desmarcar();
+        }
+    }
+    
+    /**
+     * Valida se a quantidade de músicas é suficiente para a playlist
+     * @return 
+     */
+    public boolean musicasInsuficientes(){
+        int i = 0;
+        for (Musica m : listaMusica){
+            if (m.estaMarcada()){
+                i++;
+            }
+                
+        }
+        if (i < 2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

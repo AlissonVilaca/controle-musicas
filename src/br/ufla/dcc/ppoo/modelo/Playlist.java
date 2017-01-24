@@ -8,12 +8,13 @@ import java.util.List;
  * @author alisson-vilaca
  */
 public class Playlist {
+    //nome da playlist
     private String nome;
-    
+    //usuario da playlist
     private Usuario usuario;
-    
+    //lista de palavras chaves da play list
     private List<String> listaPalavras;
-    
+    //lista de musicas da playlist
     private List<Musica> listaMusicas;
     
     public Playlist(String nome, Usuario usuario,  List<String> listaPalavras, List<Musica> listaMusicas){
@@ -26,19 +27,23 @@ public class Playlist {
     public String getNome() {
         return nome;
     }
-/*
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-*/
+
     public Usuario getUsuario() {
         return usuario;
     }
-/*
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-*/
+
+    public void setListaMusicas(List<Musica> listaMusicas) {
+        this.listaMusicas = listaMusicas;
+    }
+
     public List<String> getPalavras() {
         return listaPalavras;
     }
@@ -46,9 +51,38 @@ public class Playlist {
     public List<Musica> getMusicas() {
         return listaMusicas;
     }
-/*
+
     public void setListaPalavras(List<String> listaPalavras) {
         this.listaPalavras = listaPalavras;
-    }*/
+    }
+    
+    /**
+     * Apaga musica de uma playlist
+     * @param m 
+     */
+    public void apagarMusica(Musica m){
+        for (Musica u : listaMusicas){            
+            if (u == m){
+                listaMusicas.remove(u);
+            }
+        }
+    
+    }
+    
+    /**
+     * Compara duas playlists
+     * @param u
+     * @return 
+     */
+    public boolean comparaPlaylist (Playlist u){
+        if ((nome.equals(u.getNome()))      // este if deveria estar na classe musica, nã cabe ao if fazer
+                             && (usuario == u.getUsuario())//essa cmparação
+                    ) {
+            return true;
+        } else {            
+            return false;
+        }   
+        
+    }
     
 }

@@ -134,15 +134,38 @@ public class Musica {
         }        
     }
     
+    /**
+     * Marca uma musica para edição na playlist
+     */
     public void marcar(){
         marcada = true;
     }
     
+    /**
+     * Marca uma musica para edição na playlist
+     */
     public void desmarcar(){
         marcada = false;
     }
     
+    /**
+     * retorna se a muysica esta marcada
+     * @return 
+     */
     public boolean estaMarcada(){
         return marcada;
+    }
+    
+    /**
+     * Compara duas musicas
+     * @param j
+     * @return 
+     */
+    public boolean comparaMusicaComString(String j){
+        if (titulo.equals(j)){
+            return (true);
+        } else {
+            return (false);
+        }        
     }
 }

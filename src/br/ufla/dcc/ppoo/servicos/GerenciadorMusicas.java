@@ -4,9 +4,9 @@ import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.dao.lista.MusicaDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,11 +85,80 @@ public class GerenciadorMusicas {
         return music.obterListaMusica(login);
     }
     
+    /**
+     * Marca uma música para ser adicionada a uma playlist
+     * @param u 
+     * @param login 
+     */
     public void marcar(Musica u, Usuario login){
         music.marcar(u,login);
     }
     
+    /**
+     * Desmarca uma música, usado após uma música ser adicionada
+     * @param u
+     * @param login 
+     */
+    public void desmarcar(Musica u, Usuario login){
+        music.desmarcar(u,login);
+    }
+    
+    /**
+     * Obtem todas as Musicas marcadas
+     * @return 
+     */
     public List<Musica> obterSelecionadas() {
         return music.obterSelecionadas();        
+    }
+    
+    /**
+     * Obtem Lista de Musicas não marcadas de determinado usuario
+     * @param login
+     * @return 
+     */
+    public List<Musica> obterListaNaoMarcada(Usuario login) {        
+        return music.obterListaMusicasNaoMarcadas(login);
+    }        
+    
+    /**
+     * Obtem Lista de Musicas não marcadas de determinado usuario
+     * @param login
+     * @return 
+     */        
+    public List<Musica> obterListaMarcada(Usuario login) {        
+        return music.obterListaMusicasMarcadas(login);
+    }
+    
+    /**
+     * retorna o indice da musica desejada na lista de musicas
+     * @param list
+     * @param j
+     * @return 
+     */
+    public int obterIndice(List<Musica> list, String j) {        
+        return music.obterIndice(list,j);
+    }
+    
+    /**
+     * Marca músicas de uma playlist
+     * @param p 
+     */
+    public void marcarMusicas (Playlist p){
+            music.marcarMusicas(p);
+    }
+        
+    /**
+     * Desmarca músicas de uma playlist
+     */
+    public void desmarcarMusicas (){
+            music.desmarcarMusicas();
+    }
+    
+    /**
+     * Tratamento se a playlist tem menos de duas músicas
+     * @return 
+     */
+    public boolean musicasInsuficientes(){
+        return music.musicasInsuficientes();
     }
 }

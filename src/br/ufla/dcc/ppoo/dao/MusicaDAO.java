@@ -1,6 +1,7 @@
 package br.ufla.dcc.ppoo.dao;
 
 import br.ufla.dcc.ppoo.modelo.Musica;
+import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import java.util.List;
 
@@ -51,8 +52,62 @@ public interface MusicaDAO {
      */
     public List<Musica> obterListaMusica(Usuario login);
     
+    /**
+     * Marca uma musica
+     * @param u
+     * @param login 
+     */
     public void marcar(Musica u, Usuario login);    
     
+    /**
+     * Obtem lista de música marcadas
+     * @return 
+     */
     public List<Musica> obterSelecionadas();
-
+    
+    /**
+     * Obtem lista de musicas nao marcadas
+     * @param login
+     * @return 
+     */
+    public List<Musica> obterListaMusicasNaoMarcadas(Usuario login);
+    
+    /**
+     * obtem índice de determinada musica em uma lista
+     * @param list
+     * @param j
+     * @return 
+     */
+    public int obterIndice(List<Musica> list, String j);
+    
+    /**
+     * Marca as musicas de uma playlist para edição
+     * @param p 
+     */
+    public void marcarMusicas (Playlist p);
+    
+    /**
+     * Desmarca musicas após serem editadas
+     * @param u
+     * @param login 
+     */
+    public void desmarcar(Musica u, Usuario login);
+    
+    /**
+     * Obtem lista de músicas marcadas de um usuário
+     * @param login
+     * @return 
+     */
+    public List<Musica> obterListaMusicasMarcadas(Usuario login);
+    
+    /**
+     * Desmarca todas as músicas
+     */
+    public void desmarcarMusicas ();
+    
+    /**
+     * Valida se a quantidade de músicas é suficiente para a playlist
+     * @return 
+     */
+    public boolean musicasInsuficientes();
 }

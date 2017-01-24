@@ -532,6 +532,15 @@ public class I18N {
     public static String obterRotuloNovaPalavra() {
         return rb.getString("rotulo.playlist.palavra");
     }
+    
+    /**
+     * Retorna o texto do rótulo ano da música.
+     *
+     * @return Texto do rótulo ano da música.
+     */
+    public static String obterRotuloNovaMusica() {
+        return rb.getString("rotulo.playlist.musica");
+    }
 
     /**
      * Retorna o texto do rótulo gênero da música.

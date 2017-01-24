@@ -6,6 +6,7 @@ import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.util.Utilidades;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
 import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -23,34 +24,39 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Classe que representa a tela Minhas Listas
+ * Classe que representa a tela Minhas Playlists
  *
  * @author Álisson Vilaça
  */
 
 public class TelaMinhasPlaylists {
-    
-    private final TelaSelecaoMusicas telaSelecaoMusicas;
+    // referência para a tela de exclusão de músicas da playlist
+    private final TelaExclusaoMusicasPlaylist telaExclusaoMusicasPlaylist;
+    // referência para a tela de edição de palavras-chave da playlist
+    private final TelaEditarPalavra telaEditarPalavra;
+    // referência para a tela de seleção de músicas da playlist
+    private final TelaSelecaoMusicasPlaylist telaSelecaoMusicas;
     // referência para a tela principal
     private final TelaPrincipal telaPrincipal;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
-    // referência para o gerenciador de músicas
+    // referência para o gerenciador de playlists
     private final GerenciadorPlaylists gerenciadorPlaylists;
+    // referência para o gerenciador de músicas
+    private final GerenciadorMusicas gerenciadorMusicas;
     // variavel para controle do botão salvar;
     private boolean novo = false;
     // variavel auxiliar que recebe o nome da musica selecionada
     private String selecionada = null;
-    
+    //Lista de Palavras temporaria
     private List<String> listaPalavrasTemporaria;
-    
+    //Lista de Musicas temporaria
     private List<Musica> listaMusicasTemporaria;
     
     // componentes da tela
@@ -67,22 +73,13 @@ public class TelaMinhasPlaylists {
     private JButton btnAdicionarMusica;
     private JButton btnExlcuirMusica;
     
-    private JTable tbPlaylists;
-    private JTable tbMusicas;
-    private JTable tbPalavras;    
+    private JTable tbPlaylists;  
     
     private JLabel lbNome;
-    private JLabel lbNovapalavra;
-    
-    //private JLabel lbArtista;
-    //private JLabel lbAno;
-   // private JLabel lbGenero;
-    //private JLabel lbLetra;
+    private JLabel lbNovaPalavra;
+    private JLabel lbNovaMusica;
+   
     private JTextField txtNome;
-    private JTextField txtPalavraChave;
-   // private JTextField txtAno;
-   // private JTextField txtGenero;
-   // private JTextArea taLetra;
 
     /**
      * Constrói a tela de autenticação guardando a referência da tela principal 
@@ -94,7 +91,10 @@ public class TelaMinhasPlaylists {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorPlaylists = new GerenciadorPlaylists();
-        this.telaSelecaoMusicas = new TelaSelecaoMusicas(telaPrincipal);        
+        telaSelecaoMusicas = new TelaSelecaoMusicasPlaylist(telaPrincipal);
+        telaExclusaoMusicasPlaylist = new TelaExclusaoMusicasPlaylist(telaPrincipal);
+        gerenciadorMusicas = new GerenciadorMusicas();
+        telaEditarPalavra =  new TelaEditarPalavra(telaPrincipal);
     }
 
     /**
@@ -115,88 +115,25 @@ public class TelaMinhasPlaylists {
             I18N.obterRotuloNomePlaylist(),
             I18N.obterRotuloAutor()
         };
-        // Lista utilizada para preencher a JTable com a lista de músicas do usuário
+        // Lista utilizada para preencher a JTable com a lista de playlists do usuário
         List<String[]> lista = new ArrayList<>();
         
-        // Adiciona o título e o artista de cada música na lista de preenchimento da Jtable
+        // Adiciona o nome e o usuario de cada playlist na lista de preenchimento da Jtable
         gerenciadorPlaylists.obterLista(sessaoUsuario.obterUsuario()).stream().forEach((p) -> {
             lista.add(new String[]{p.getNome(),p.getUsuario().obterNome()});
         });        
                
-        // Modelo utilizado na Jtable de músicas
+        // Modelo utilizado na Jtable de playlists
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
    
-        // JTable recebe o modelo criado, com a listas de músicas do usuário
+        // JTable recebe o modelo criado, com a listas de playlist do usuário
         tbPlaylists = new JTable();
         tbPlaylists.setModel(model);
         tbPlaylists.setPreferredScrollableViewportSize(new Dimension(500, 70));
         tbPlaylists.setFillsViewportHeight(true);
     }
     
-    /**
-     * Constrói a janela tratando internacionalização, componentes e layout.
-     */
-    private void construirTabelaPalavras(boolean controle) {              
-        Object[] titulosColunas = {
-            I18N.obterRotuloPalavraChave()
-        };
-        // Lista utilizada para preencher a JTable com a lista de músicas do usuário
-        List<String[]> lista = new ArrayList<>();
-        
-        if (!controle) {
-            
-            // Adiciona o palavra na lista de preenchimento da Jtable
-            gerenciadorPlaylists.obterPalavras(sessaoUsuario.obterUsuario(),selecionada).stream().forEach((p) -> {
-                lista.add(new String[]{p});
-            }); 
-        } else {
-          //  System.out.println("teste");
-            listaPalavrasTemporaria.stream().forEach((p) -> {
-                lista.add(new String[]{p});
-            });                         
-        }
-               
-        // Modelo utilizado na Jtable de músicas
-        DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
-   
-        // JTable recebe o modelo criado, com a listas de músicas do usuário
-        tbPalavras = new JTable();
-        tbPalavras.setModel(model);
-        tbPalavras.setPreferredScrollableViewportSize(new Dimension(200, 70));
-        tbPalavras.setFillsViewportHeight(true);
-    }
     
-    /**
-     * Constrói a janela tratando internacionalização, componentes e layout.
-     */
-    private void construirTabelaMusicas(boolean controle) {              
-        Object[] titulosColunas = {
-            I18N.obterRotuloMusicas()
-        };
-        // Lista utilizada para preencher a JTable com a lista de músicas do usuário
-        List<String[]> lista = new ArrayList<>();
-        if (!controle) {
-            // Adiciona o palavra na lista de preenchimento da Jtable
-            gerenciadorPlaylists.obterMusicas(sessaoUsuario.obterUsuario(),selecionada).stream().forEach((m) -> {
-                lista.add(new String[]{m.obterTitulo()});
-            });        
-        } else {
-            
-            listaMusicasTemporaria.stream().forEach((m) -> {
-                lista.add(new String[]{m.obterTitulo()});
-            });
-        }               
-            
-        // Modelo utilizado na Jtable de músicas
-        DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
-   
-        // JTable recebe o modelo criado, com a listas de músicas do usuário
-        tbMusicas = new JTable();
-        tbMusicas.setModel(model);
-        tbMusicas.setPreferredScrollableViewportSize(new Dimension(200, 70));
-        tbMusicas.setFillsViewportHeight(true);
-    }
-
     /**
      * Adiciona um componente à tela.
      */
@@ -221,16 +158,9 @@ public class TelaMinhasPlaylists {
         tbPlaylists.clearSelection();
         tbPlaylists.setEnabled(true);
                 
-        tbPalavras.clearSelection();
-        tbPalavras.setEnabled(false);
-        
-        tbMusicas.clearSelection();
-        tbMusicas.setEnabled(false);
-        
         txtNome.setText("");
 
         txtNome.setEditable(false);
-       
        
         btnAdicionarMusica.setEnabled(false);
         btnAdicionarPalavra.setEnabled(false);
@@ -243,7 +173,7 @@ public class TelaMinhasPlaylists {
     }
 
     /**
-     * Trata o estado da tela para seleção de músicas
+     * Trata o estado da tela para seleção de playlists
      */
     private void prepararComponentesEstadoSelecaoMusica() {
         txtNome.setEditable(false);
@@ -256,24 +186,16 @@ public class TelaMinhasPlaylists {
     }
 
     /**
-     * Trata o estado da tela para cadastro de nova música
+     * Trata o estado da tela para cadastro de nova playlist
      */
     private void prepararComponentesEstadoNovaMusica() {
         tbPlaylists.clearSelection();
         tbPlaylists.setEnabled(false);
-        
-        tbPalavras.disable();
-        tbPalavras.clearSelection();
-        tbPalavras.setEnabled(true);
-        
-        tbMusicas.disable();
-        tbMusicas.clearSelection();
-        tbMusicas.setEnabled(true);
 
         txtNome.setText("");
 
         txtNome.setEditable(true);
-      
+        
         btnAdicionarMusica.setEnabled(true);
         btnAdicionarPalavra.setEnabled(true);
         btnExlcuirMusica.setEnabled(true);
@@ -285,19 +207,13 @@ public class TelaMinhasPlaylists {
     }
 
     /**
-     * Trata o estado da tela para cadastro música editada
+     * Trata o estado da tela para cadastro playlist editada
      */
     private void prepararComponentesEstadoEditouMusica() {
         tbPlaylists.setEnabled(false);
-
-        tbPalavras.clearSelection();
-        tbPalavras.setEnabled(true);
-        
-        tbMusicas.clearSelection();
-        tbMusicas.setEnabled(true);
         
         txtNome.setEditable(true);
-
+        
         btnAdicionarMusica.setEnabled(true);
         btnAdicionarPalavra.setEnabled(true);
         btnExlcuirMusica.setEnabled(true);
@@ -318,21 +234,7 @@ public class TelaMinhasPlaylists {
         adicionarComponente(scrollPaneTabela,
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
-                0, 0, 4, 1);
-        
-        construirTabelaPalavras(false);
-        JScrollPane scrollPaneTabela1 = new JScrollPane(tbPalavras);
-        adicionarComponente(scrollPaneTabela1,
-                GridBagConstraints.LINE_START,
-                GridBagConstraints.NONE,
-                2, 0, 2, 1);
-        
-        construirTabelaMusicas(false);
-        JScrollPane scrollPaneTabela2 = new JScrollPane(tbMusicas);
-        adicionarComponente(scrollPaneTabela2,
-                GridBagConstraints.LINE_END,
-                GridBagConstraints.NONE,
-                2, 1, 4, 1);
+                0, 0, 4, 1);       
 
         lbNome = new JLabel(I18N.obterRotuloNome());
         adicionarComponente(lbNome,
@@ -346,19 +248,28 @@ public class TelaMinhasPlaylists {
                 GridBagConstraints.HORIZONTAL,
                 1, 1, 3, 1);
         
-        btnNovaMusica = new JButton(I18N.obterBotaoNovo(),
-                GerenciadorDeImagens.NOVO);
+        lbNovaPalavra = new JLabel(I18N.obterRotuloNovaPalavra());
+        JPanel painel5 = new JPanel();;
+        painel5.add(lbNovaPalavra);
+        adicionarComponente(painel5,
+                GridBagConstraints.LINE_START,
+                GridBagConstraints.NONE,
+                4, 0, 2, 1); 
         
-        lbNovapalavra = new JLabel(I18N.obterRotuloNovaPalavra());
+        lbNovaMusica =  new JLabel(I18N.obterRotuloNovaMusica());
+        JPanel painel4 = new JPanel();;
+        painel4.add(lbNovaMusica);
+
+
+        adicionarComponente(painel4,
+                GridBagConstraints.LINE_END,
+                GridBagConstraints.NONE,
+                4, 0, 4, 1);               
         
         btnAdicionarPalavra = new JButton(I18N.obterBotaoAdicionar(),
                 GerenciadorDeImagens.NOVO);
         
-        txtPalavraChave = new JTextField(10);
-        
-        JPanel painel = new JPanel();
-        painel.add(lbNovapalavra);
-        painel.add(txtPalavraChave);
+        JPanel painel = new JPanel();;
         painel.add(btnAdicionarPalavra);
 
         adicionarComponente(painel,
@@ -366,7 +277,7 @@ public class TelaMinhasPlaylists {
                 GridBagConstraints.NONE,
                 5, 0, 2, 1);          
        
-        btnAdicionarMusica = new JButton(I18N.obterBotaoNova(),
+        btnAdicionarMusica = new JButton(I18N.obterBotaoAdicionar(),
                 GerenciadorDeImagens.NOVO);
         
         btnExlcuirMusica = new JButton(I18N.obterBotaoExcluir(),
@@ -414,20 +325,21 @@ public class TelaMinhasPlaylists {
     }
 
     /**
-     * Trata a seleção de músicas na grade.
+     * Trata a seleção de playlist na grade.
      */
     private void selecionouMusica() {        
-        //É usado uma lista auxiliar que recebe somente as musicas do usuario 
-        //atual para preencher os Text Fields        
+        //É usado uma lista auxiliar que recebe somente as playlists do usuario 
+        //atual para preencher os componentes
         
         List<Playlist> lista = new ArrayList<>();       
         lista = gerenciadorPlaylists.obterLista(sessaoUsuario.obterUsuario());
         
-        Playlist m = lista.get(tbPlaylists.getSelectedRow());// Eu estava psquisand na lista uma vez paa cada campo prenchido, dessa                 
-        
+        Playlist m = lista.get(tbPlaylists.getSelectedRow());                
+        //Seta a lista temporaria para a selecionada na tela
+        gerenciadorPlaylists.setarEditada(m);        
+        gerenciadorMusicas.marcarMusicas(m);
         selecionada = m.getNome();
         novo = false; 
-        atualizaTabelaPalavras();
         txtNome.setText(m.getNome());
     }
 
@@ -435,6 +347,13 @@ public class TelaMinhasPlaylists {
      * Configura os eventos da tela.
      */
     private void configurarEventosTela() {
+        btnExlcuirMusica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                telaExclusaoMusicasPlaylist.inicializar(); 
+            }
+        });
+        
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -452,33 +371,15 @@ public class TelaMinhasPlaylists {
         btnAdicionarPalavra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listaPalavrasTemporaria.add(txtPalavraChave.getText());
-                txtPalavraChave.setText("");               
+                telaEditarPalavra.inicializar();         
             }
-        });
-
-        tbPalavras.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                prepararComponentesEstadoSelecaoMusica();
-                selecionouMusica();
-            }
-        });
-        
-        tbMusicas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                prepararComponentesEstadoSelecaoMusica();
-                selecionouMusica();
-            }
-        });
-        
+        }); 
+       
         tbPlaylists.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 prepararComponentesEstadoSelecaoMusica();
                 selecionouMusica();
-                novo = false;
             }
         });
 
@@ -486,40 +387,50 @@ public class TelaMinhasPlaylists {
             @Override
             public void actionPerformed(ActionEvent e) {
                 novo = false;
-                selecionada = txtNome.getText();
-                prepararComponentesEstadoEditouMusica();
+                selecionada = txtNome.getText();                
+                Playlist p = new Playlist(selecionada, sessaoUsuario.obterUsuario(), 
+                        gerenciadorPlaylists.obterPalavras(sessaoUsuario.obterUsuario(), selecionada), 
+                        gerenciadorPlaylists.obterMusicas(sessaoUsuario.obterUsuario(), selecionada));                
+                gerenciadorPlaylists.setarEditada(p);
+                gerenciadorMusicas.marcarMusicas(p);
+                prepararComponentesEstadoEditouMusica();     
+                
             }
         });
 
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gerenciadorPlaylists.cadastrarPlaylist(listaPalavrasTemporaria,txtNome.getText(),sessaoUsuario.obterUsuario());
-
-                    //Musica mus = carregarMusica();  
-                  Musica mus = new Musica("T","t",1,"i","o",sessaoUsuario.obterUsuario());  
+                /*gerenciadorPlaylists.setarEditada(new Playlist(txtNome.getText(),
+                        sessaoUsuario.obterUsuario(), 
+                        listaPalavrasTemporaria, 
+                        listaMusicasTemporaria));  */                               
                 try{                                                    
-                    if (mus == null){  //Faz o tratamento de erro caso seja inserido um ano inválido           
+                    if (txtNome.getText() == ""){  //Faz o tratamento de erro caso seja inserido um ano inválido           
                         throw new Exception(I18N.obterErroAnoInvalido());
-                    } else if(  mus.obterTitulo().equals("") || 
-                                mus.obterArtista().equals("") ||
-                                mus.obterGenero().equals("") ||
-                                mus.obterAno() == 0){   //faz o tratamento de erros caso o algum campo esteja em branco
+                    } else if(gerenciadorPlaylists.obterPlaylistTemporaria().getPalavras().size() == 0){   //faz o tratamento de erros caso o algum campo esteja em branco
                         throw new Exception(I18N.obterErroValorInvalido());
+                    } else if(gerenciadorMusicas.musicasInsuficientes()){   //faz o tratamento de erros caso o algum campo esteja em branco
+                        throw new Exception(I18N.obterErroValorInvalido());                                        
                     } else{ 
-                        if (novo){
-                            // chama o método adicionar musica da MúsicaDAOLista
-                         //   gerenciadorMusicas.cadastrarMusica(mus);
-                            Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
+                        if (novo) { 
+                            //preenche a playlist temporaria com os dados da tela
+                            gerenciadorPlaylists.setarEditada(new Playlist(txtNome.getText(),
+                            sessaoUsuario.obterUsuario(), 
+                            listaPalavrasTemporaria, 
+                            listaMusicasTemporaria)); 
+                            //Cadastra a playlist
+                            gerenciadorPlaylists.cadastrarPlaylist();
                         } else {
-                            // chama o método editar musica da MúsicaDAOLista
-                         //   gerenciadorMusicas.alterarMusica(mus,selecionada);
-                            Utilidades.msgInformacao(I18N.obterSucessoAlteracaoMusica());
-                        }
-                    }
+                            //Edita a PLaylist
+                            gerenciadorPlaylists.editarPlaylist(selecionada,txtNome.getText());
+                        } 
+                            }
                 } catch (Exception ex) {
                     Utilidades.msgErro(ex.getMessage());  
                 }    
+                //desmarca as musicas que estavam selecionadas durante o salvamento
+                gerenciadorMusicas.desmarcarMusicas();
                 atualizaTabela();
             }
         });
@@ -527,14 +438,15 @@ public class TelaMinhasPlaylists {
         btnNovaMusica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tbPlaylists.disable();
+                construirTabela();
                 listaPalavrasTemporaria = new ArrayList<String>();
                 listaMusicasTemporaria = new ArrayList<Musica>();
-                tbPlaylists.disable();
                 novo = true;
-                construirTabela();
-                construirTabelaPalavras(novo);
-                construirTabelaMusicas(novo);
-                prepararComponentesEstadoNovaMusica();                
+                //seta a playlist temporario com uma nova playlist em branco
+                gerenciadorPlaylists.setarEditada(new Playlist("", sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria));         
+                prepararComponentesEstadoNovaMusica(); 
+                gerenciadorMusicas.desmarcarMusicas();
             }
         });
 
@@ -542,8 +454,8 @@ public class TelaMinhasPlaylists {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoDeletar())) {
-                    // chama o método remover musica da MúsicaDAOLista
-                   // gerenciadorMusicas.removerMusica(txtTitulo.getText());
+                    // chama o método remover musica da PlaylistDAOLista
+                    gerenciadorPlaylists.removerPlaylist(txtNome.getText());
                     Utilidades.msgInformacao(I18N.obterSucessoRemocaoMusica());
                     atualizaTabela();
                 }
@@ -554,26 +466,13 @@ public class TelaMinhasPlaylists {
     /**
      * Função que faz o refresh na tabela, atualizando sua exibição
      */
-    public void atualizaTabela(){        
+    public void atualizaTabela(){ 
+        gerenciadorMusicas.desmarcarMusicas();
         construirTabela();
-        construirTabelaMusicas(novo);
-        construirTabelaPalavras(novo);
         prepararComponentesEstadoInicial();      
         janela.dispose();
         inicializar();
     }    
-
-    /**
-     * Função que faz o refresh na tabela, atualizando sua exibição
-     */
-    public void atualizaTabelaPalavras(){        
-        janela.dispose();
-        inicializar();                        
-        construirTabela();
-        construirTabelaPalavras(novo);
-        construirTabelaMusicas(novo);
-        prepararComponentesEstadoNovaMusica(); 
-    }  
     
     /**
      * Constrói a janela tratando internacionalização, componentes e layout.
