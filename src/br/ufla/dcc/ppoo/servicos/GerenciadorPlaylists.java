@@ -77,7 +77,6 @@ public class GerenciadorPlaylists {
         } else {
                 return u.getMusicas();
         }
-    //    return playlist.getPlaylist(login,selecionada).getMusicas();
     }
     
     /**
@@ -87,7 +86,7 @@ public class GerenciadorPlaylists {
     public void cadastrarPlaylist() throws Exception {
         boolean ret = playlist.comparaPlaylist();
         if (ret) {
-            throw new Exception(I18N.obterErroMusicaJaCadastrada());
+            throw new Exception(I18N.obterErroPlaylistJaCadastrada());
         } else {
             playlist.adicionarPlaylist(gerenciadorMusicas.obterSelecionadas());         
         }                       
@@ -107,7 +106,7 @@ public class GerenciadorPlaylists {
         }else{
             boolean ret = playlist.comparaPlaylist();
             if (ret) {
-                throw new Exception(I18N.obterErroMusicaJaCadastrada());
+                throw new Exception(I18N.obterErroPlaylistComMesmoNome());
             } else { 
                 playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada,publi);                   
             }   
@@ -185,5 +184,25 @@ public class GerenciadorPlaylists {
      */
     public String getPlaylistExibida(){
        return playlist.getPlaylistExibida();
+    }
+    
+    public boolean isImportou() {
+        return playlist.isImportou();
+    }
+
+    public void setImportou(boolean importou) {
+        playlist.setImportou(importou);
+    }
+    
+    public void arrumaMusicasImportadas(Usuario atual) {
+        playlist.arrumaMusicasImportadas(atual);
+    }
+    
+    public Playlist getExibida() {
+        return playlist.getExibida();
+    }
+    
+    public List<Musica> getMusicasImportadas(Usuario atual){
+        return playlist.getMusicasImportadas(atual);    
     }
 }

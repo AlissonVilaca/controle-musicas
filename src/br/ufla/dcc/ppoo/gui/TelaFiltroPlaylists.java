@@ -235,14 +235,14 @@ public class TelaFiltroPlaylists {
         btnSelecionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                janela.dispose();
                 if (sessaoUsuario.estahLogado()){
                     telaExibePlaylistLogado.inicializar();
                 } else {
                     telaExibePlaylistDeslogado.inicializar();
                 }
                 listaPalavras.removeAll(listaPalavras);
-                gerenciadorPlaylist.zerarExibida();
-                janela.dispose(); 
+                //gerenciadorPlaylist.zerarExibida();                 
             }
         });
 

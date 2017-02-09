@@ -110,4 +110,8 @@ public interface MusicaDAO {
      * @return 
      */
     public boolean musicasInsuficientes();
+    
+    public Musica buscaMusicasPeloNome(Musica u,Usuario atual);
+    
+    public boolean verificaMusicas(Musica musica, Usuario atual);
 }

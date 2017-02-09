@@ -168,4 +168,12 @@ public class Musica {
             return (false);
         }        
     }
+    
+    public boolean verificaMusicas(String musica, Usuario atual){
+        if ((titulo.equals(musica)) && (usuario.obterNome().equals(atual.obterNome()))){
+            return (true);
+        } else {
+            return (false);
+        }  
+    }
 }

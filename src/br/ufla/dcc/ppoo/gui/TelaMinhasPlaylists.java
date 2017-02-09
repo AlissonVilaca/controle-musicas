@@ -329,8 +329,12 @@ public class TelaMinhasPlaylists {
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
                 6, 0, 4, 1);
-        
+        if (!gerenciadorPlaylists.isImportou()){
             prepararComponentesEstadoInicial();
+        } else {
+            prepararComponentesEstadoEditouMusica();   
+            arrumaImportada();
+        }
     }
 
     /**
@@ -349,10 +353,55 @@ public class TelaMinhasPlaylists {
         gerenciadorMusicas.marcarMusicas(m);
         selecionada = m.getNome();
         rbtnPublico.setSelected(m.isVisilidade());
+        
         novo = false; 
         txtNome.setText(m.getNome());
     }
 
+    private void arrumaImportada(){
+        //Importa todas as musicas com nome diferente das já cadastradas pelo usuario
+        gerenciadorPlaylists.arrumaMusicasImportadas(sessaoUsuario.obterUsuario());
+                        
+        tbPlaylists.disable();
+        Playlist p = gerenciadorPlaylists.getExibida();
+        
+        listaMusicasTemporaria = gerenciadorPlaylists.getMusicasImportadas(sessaoUsuario.obterUsuario());
+        
+        listaPalavrasTemporaria = p.getPalavras();
+        
+        Playlist nova = new Playlist(p.getNome(), sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria, true);
+        
+        txtNome.setText(nova.getNome());
+        gerenciadorPlaylists.setarEditada(nova);
+        gerenciadorMusicas.marcarMusicas(nova);
+        novo = true;
+        rbtnPublico.setSelected(nova.isVisilidade());
+        gerenciadorPlaylists.zerarExibida();
+        
+      
+      
+      
+              // listaPalavrasTemporaria = new ArrayList<String>();
+             //   listaMusicasTemporaria = new ArrayList<Musica>();
+              //  novo = true;
+                //seta a playlist temporario com uma nova playlist em branco
+        /*gerenciadorPlaylists.setarEditada(new Playlist(, sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria,false));         
+                prepararComponentesEstadoNovaMusica(); 
+                gerenciadorMusicas.desmarcarMusicas();
+        
+        
+        
+        gerenciadorPlaylists.setarEditada(m);        
+        gerenciadorMusicas.marcarMusicas(m);
+        selecionada = m.getNome();
+        rbtnPublico.setSelected(m.isVisilidade());
+        novo = false; 
+        txtNome.setText(m.getNome());*/
+        
+        
+    }
+    
+    
     /**
      * Configura os eventos da tela.
      */
@@ -367,6 +416,7 @@ public class TelaMinhasPlaylists {
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                gerenciadorPlaylists.setImportou(false);
                 janela.dispose();
             }
         });
@@ -413,12 +463,12 @@ public class TelaMinhasPlaylists {
             @Override
             public void actionPerformed(ActionEvent e) {                               
                 try{                                                    
-                    if (txtNome.getText() == ""){  //Faz o tratamento de erro caso seja inserido um ano inválido           
-                        throw new Exception(I18N.obterErroAnoInvalido());
-                    } else if(gerenciadorPlaylists.obterPlaylistTemporaria().getPalavras().size() == 0){   //faz o tratamento de erros caso o algum campo esteja em branco
-                        throw new Exception(I18N.obterErroValorInvalido());
-                    } else if(gerenciadorMusicas.musicasInsuficientes()){   //faz o tratamento de erros caso o algum campo esteja em branco
-                        throw new Exception(I18N.obterErroValorInvalido());                                        
+                    if (txtNome.getText() == ""){  //Faz o tratamento de erro caso nome esteja em branco          
+                        throw new Exception(I18N.obterErroNomeEmBranco());
+                    } else if(gerenciadorPlaylists.obterPlaylistTemporaria().getPalavras().size() == 0){   //faz o tratamento de erros caso nao tenha palavras-chave
+                        throw new Exception(I18N.obterErroPalavrasInsuficientes());
+                    } else if(gerenciadorMusicas.musicasInsuficientes()){   //faz o tratamento de erros caso nao tenha musicas suficientes
+                        throw new Exception(I18N.obterErroMusicasInsuficientes());                                        
                     } else{ 
                         if (novo) { 
                             //preenche a playlist temporaria com os dados da tela
@@ -435,12 +485,17 @@ public class TelaMinhasPlaylists {
                             publi)); 
                             //Cadastra a playlist
                             gerenciadorPlaylists.cadastrarPlaylist();
+                            gerenciadorPlaylists.setImportou(false);
+                            Utilidades.msgInformacao(I18N.obterSucessoCadastroPlaylist());
                         } else {
                             //Edita a PLaylist                            
                             gerenciadorPlaylists.editarPlaylist(selecionada,txtNome.getText(),rbtnPublico.isSelected());
+                            gerenciadorPlaylists.setImportou(false);
+                            Utilidades.msgInformacao(I18N.obterSucessoEdicaoPlaylist());
                         } 
                             }
                 } catch (Exception ex) {
+                    gerenciadorPlaylists.setImportou(false);
                     Utilidades.msgErro(ex.getMessage());  
                 }    
                 //desmarca as musicas que estavam selecionadas durante o salvamento
@@ -470,7 +525,7 @@ public class TelaMinhasPlaylists {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoDeletar())) {
                     // chama o método remover musica da PlaylistDAOLista
                     gerenciadorPlaylists.removerPlaylist(txtNome.getText());
-                    Utilidades.msgInformacao(I18N.obterSucessoRemocaoMusica());
+                    Utilidades.msgInformacao(I18N.obterSucessoRemocaoPlaylist());
                     atualizaTabela();
                 }
             }

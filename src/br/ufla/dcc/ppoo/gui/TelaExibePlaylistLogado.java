@@ -4,6 +4,7 @@ import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
+import br.ufla.dcc.ppoo.util.Utilidades;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,6 +41,8 @@ public class TelaExibePlaylistLogado {
     private final GerenciadorPlaylists gerenciadorPlaylist;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
+    //
+    private final TelaMinhasPlaylists telaMinhasPlaylists;
 
     /**
      * Constrói a tela de filtro aguardando a referência da tela principal
@@ -51,6 +54,7 @@ public class TelaExibePlaylistLogado {
         this.telaPrincipal = telaPrincipal;
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorPlaylist = new GerenciadorPlaylists();
+        telaMinhasPlaylists = new TelaMinhasPlaylists(telaPrincipal);
     }
 
     /**
@@ -150,14 +154,13 @@ public class TelaExibePlaylistLogado {
         btnImportar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (sessaoUsuario.estahLogado()){
-
+                if (sessaoUsuario.obterUsuario() != gerenciadorPlaylist.getExibida().getUsuario()){
+                    gerenciadorPlaylist.setImportou(true);
+                    janela.dispose();
+                    telaMinhasPlaylists.inicializar();    
                 } else {
-              //      telaExibePlaylistNaoLogado.inicializar();
-                }
-              //  listaPalavras.removeAll(listaPalavras);
-                gerenciadorPlaylist.zerarExibida();
-                janela.dispose(); 
+                    Utilidades.msgErro("Você não pode Importar uma lista sua!");
+                }    
             }
         });
         

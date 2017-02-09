@@ -4,9 +4,12 @@ import br.ufla.dcc.ppoo.dao.PlaylistDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
+import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** 
  * Implementação da lista de PLaylists, que é um atributo da Classe Playlist
@@ -23,6 +26,11 @@ public class PlaylistDAOLista implements PlaylistDAO {
     private Playlist playlistSendoEdiatada; 
    //playlist temporaria usada para guardar a playlist que o Usuario quer que seja exibida
     private Playlist exibida;
+    // referência para o gerenciador de músicas
+    private final GerenciadorMusicas gerenciadorMusicas;
+    //variavel usada para controlar a tela de Minhas de Playlists, para inicializar 
+    // a tela corretamente, quando é importada uma música
+    private boolean importou;
     
     
     /**
@@ -35,7 +43,9 @@ public class PlaylistDAOLista implements PlaylistDAO {
     private PlaylistDAOLista(String auxiliar){
         listaPlaylist = new ArrayList<Playlist>();   
         playlistSendoEdiatada = new Playlist("", new Usuario(), null, null,false);        
-        exibida = new Playlist("", new Usuario(), null, null,false);  
+        exibida = new Playlist("", new Usuario(), null, null,false); 
+        importou = false;
+        gerenciadorMusicas = new GerenciadorMusicas();
     }
     
     /**
@@ -242,5 +252,39 @@ public class PlaylistDAOLista implements PlaylistDAO {
                           
         return texto;
     }
+
+    public boolean isImportou() {
+        return importou;
+    }
+
+    public void setImportou(boolean importou) {
+        this.importou = importou;
+    }  
     
+    public void arrumaMusicasImportadas(Usuario atual) {                                
+        for (Musica u : exibida.getMusicas()){
+            if (!gerenciadorMusicas.verificaMusicas(u,atual)){
+                try {
+                    gerenciadorMusicas.cadastrarMusica(new Musica(u.obterTitulo(), 
+                            u.obterArtista(), u.obterAno(),
+                            u.obterGenero(), u.obterLetra(), atual));
+                } catch (Exception ex) {
+                    Logger.getLogger(PlaylistDAOLista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        }
+    } 
+    
+    public Playlist getExibida() {
+        return exibida;
+    }
+    
+    public List<Musica> getMusicasImportadas(Usuario atual){
+        List<Musica> mu= new ArrayList<>();
+        for (Musica u : exibida.getMusicas()){
+            mu.add(gerenciadorMusicas.buscaMusicasPeloNome(u,atual));
+        }        
+        
+        return mu;    
+    }
 }

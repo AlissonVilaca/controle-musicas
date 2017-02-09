@@ -161,4 +161,12 @@ public class GerenciadorMusicas {
     public boolean musicasInsuficientes(){
         return music.musicasInsuficientes();
     }
+    
+    public boolean verificaMusicas (Musica musica, Usuario atual){
+        return music.verificaMusicas(musica,atual);
+    }
+    
+    public Musica buscaMusicasPeloNome(Musica u,Usuario atual){          
+        return music.buscaMusicasPeloNome(u, atual);
+    }
 }

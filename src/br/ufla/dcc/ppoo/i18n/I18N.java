@@ -669,4 +669,81 @@ public class I18N {
     public static String obterRotuloAutor() {
         return rb.getString("rotulo.playlist.autor");
     }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroPlaylistJaCadastrada() {
+        return rb.getString("erro.playlist.jacadastrada");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroPlaylistComMesmoNome() {
+        return rb.getString("erro.playlist.mesmonome");
+    }   
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterSucessoCadastroPlaylist() {
+        return rb.getString("sucesso.cadastro.playlist");
+    } 
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterSucessoEdicaoPlaylist() {
+        return rb.getString("sucesso.edicao.playlist");
+    } 
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterSucessoRemocaoPlaylist() {
+        return rb.getString("sucesso.remocao.playlist");
+    } 
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroNomeEmBranco() {
+        return rb.getString("erro.playlist.nome");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroPalavrasInsuficientes() {
+        return rb.getString("erro.playlist.palavras");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroMusicasInsuficientes() {
+        return rb.getString("erro.playlist.musicas");
+    }
+    
+    
+            
+            
+    
 }

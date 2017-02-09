@@ -253,4 +253,24 @@ public class MusicaDAOLista implements MusicaDAO{
             return false;
         }
     }
+    
+    public Musica buscaMusicasPeloNome(Musica u,Usuario atual){        
+        Musica musica;
+        for (Musica l : listaMusica) {
+            if ((l.obterUsuario() == atual) && l.obterTitulo().equals(u.obterTitulo()) ) {
+                return l;
+            }
+        }   
+        return new Musica("testelol", "teste", 0, "teste", "letra", atual);
+    }
+    
+    public boolean verificaMusicas(Musica musica, Usuario atual){
+        for (Musica u : listaMusica) {
+            if(musica.verificaMusicas(u.obterTitulo(),atual)){
+                return true;                
+            }            
+        }        
+        return false;
+    
+    }
 }

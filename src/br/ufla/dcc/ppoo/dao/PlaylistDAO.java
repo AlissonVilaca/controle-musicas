@@ -99,4 +99,14 @@ public interface PlaylistDAO {
      * @param titulo 
      */
     public String getPlaylistExibida();
+    
+    public boolean isImportou();
+    
+    public void setImportou(boolean importou);
+    
+    public void arrumaMusicasImportadas(Usuario atual);
+    
+    public Playlist getExibida();
+    
+    public List<Musica> getMusicasImportadas(Usuario atual);
 }
