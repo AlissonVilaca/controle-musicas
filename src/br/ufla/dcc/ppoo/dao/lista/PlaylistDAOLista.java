@@ -20,7 +20,10 @@ public class PlaylistDAOLista implements PlaylistDAO {
     // lista em em memória das playlists cadastradas
     private final List<Playlist> listaPlaylist;
     //playlist temporaria usada para adicionar e editar playlists
-    private Playlist playlistSendoEdiatada; //arrumar
+    private Playlist playlistSendoEdiatada; 
+   //playlist temporaria usada para guardar a playlist que o Usuario quer que seja exibida
+    private Playlist exibida;
+    
     
     /**
     * Constrói o objeto lista de playlists. 
@@ -31,7 +34,8 @@ public class PlaylistDAOLista implements PlaylistDAO {
     */ 
     private PlaylistDAOLista(String auxiliar){
         listaPlaylist = new ArrayList<Playlist>();   
-        playlistSendoEdiatada = new Playlist("", new Usuario(), null, null);
+        playlistSendoEdiatada = new Playlist("", new Usuario(), null, null,false);        
+        exibida = new Playlist("", new Usuario(), null, null,false);  
     }
     
     /**
@@ -82,7 +86,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
      * @param m 
      */
     public void adicionarPlaylist(List<Musica> m) {
-        listaPlaylist.add(new Playlist(playlistSendoEdiatada.getNome(), playlistSendoEdiatada.getUsuario(), playlistSendoEdiatada.getPalavras(), m));
+        listaPlaylist.add(new Playlist(playlistSendoEdiatada.getNome(), playlistSendoEdiatada.getUsuario(), playlistSendoEdiatada.getPalavras(), m, playlistSendoEdiatada.isVisilidade()));
     }
     
     /**
@@ -90,14 +94,14 @@ public class PlaylistDAOLista implements PlaylistDAO {
      * @param m
      * @param selecionada 
      */
-    public void editarPlaylist(List<Musica> m, String selecionada) {
+    public void editarPlaylist(List<Musica> m, String selecionada,boolean publi) {
         for (Playlist u : listaPlaylist) {
             if (u.getNome().equals(selecionada) 
                     && (u.getUsuario()== playlistSendoEdiatada.getUsuario())){                
                 u.setNome(playlistSendoEdiatada.getNome());
                 u.setListaMusicas(m);
                 u.setListaPalavras(playlistSendoEdiatada.getPalavras());
-
+                u.setVisilidade(publi);
             }
         }        
     }
@@ -160,4 +164,83 @@ public class PlaylistDAOLista implements PlaylistDAO {
     public void adicionarPalavra(String palavra){
         playlistSendoEdiatada.getPalavras().add(palavra);
     }
+    
+     /**
+     * Faz a Busca de PLaylists com as palavras digitadas pelo usuario
+     * @param titulo 
+     */
+    public List<Playlist> buscaPlaylists(List<String> palavra){
+        List<Playlist> lista = new ArrayList<Playlist>();
+        for ( String s : palavra){
+            for (Playlist p : listaPlaylist) {
+                if(p.isVisilidade()){    
+                    if(p.getNome().equals(s)){
+                        if (!lista.contains(p)){
+                            lista.add(p);
+                        }                    
+                    }
+                    for (String sg : p.getPalavras()) {
+                        if (sg.equals(s)){
+                            if (!lista.contains(p)){
+                                lista.add(p);
+                            }   
+                        }
+                    }
+                }
+            }                                    
+        }
+        return lista;
+    }
+    
+    /**
+     * Seta a Playlist que o Usuario selecionou para ser exibida
+     * @param titulo 
+     */
+    public void setarExibida(Playlist palavra){
+        exibida.setNome(palavra.getNome());   
+        exibida.setListaPalavras(palavra.getPalavras());
+        exibida.setListaMusicas(palavra.getMusicas());
+        exibida.setUsuario(palavra.getUsuario());
+        exibida.setVisilidade(exibida.isVisilidade());
+    }
+    
+    /**
+     * Zera a Playlist "Exibida"
+     * @param titulo 
+     */
+    public void zerarExibida(){
+       exibida.setNome("");
+       exibida.setListaMusicas(null);
+       exibida.setListaPalavras(null);
+       exibida.setUsuario(null);
+       exibida.setVisilidade(false);               
+    }
+    
+    /**
+     * Retorna a Playlist "Exibida"
+     * @param titulo 
+     */
+    public String getPlaylistExibida(){
+        String texto = new String();
+            texto = "Lista: " + exibida.getNome() + 
+                    "\nAutor: " + exibida.getUsuario().obterNome() +
+                    "\nPalavras-chave: ";
+            for (int i = 0; i < exibida.getPalavras().size(); i++) {
+                texto += exibida.getPalavras().get(i);
+                if (i == exibida.getPalavras().size()-1){
+                    texto+=".\n";
+                } else {
+                    texto+=", "; 
+                }
+            }
+            texto += "Lista de músicas:\n";
+            for (int i = 0; i < exibida.getMusicas().size(); i++) {
+                int j = i+1;
+                texto+= "     " + j +"."+exibida.getMusicas().get(i).obterTitulo()+
+                        " (" + exibida.getMusicas().get(i).obterArtista() + ")\n";
+            }
+                          
+        return texto;
+    }
+    
 }

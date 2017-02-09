@@ -3,32 +3,25 @@ package br.ufla.dcc.ppoo.gui;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
-import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
 import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextArea;
 
 /**
- * Tela de Edição de palavras-chave de uma playlist
- * @author aluno
+ *
+ * @author alisson-vilaca
  */
-public class TelaEditarPalavra {
-  
+public class TelaExibePlaylistLogado {
+      
     // referência para a tela principal
     private final TelaPrincipal telaPrincipal;
             
@@ -36,29 +29,26 @@ public class TelaEditarPalavra {
     private JDialog janela;
     private GridBagLayout layout;
     private GridBagConstraints gbc;
-    private JTextField txtPalavra;
-    private JButton btnEntrar;
-    private JButton btnExcluir;
-    private JButton btnCancelar;
+    private JTextArea txaExibicao;
     
-    // referência para o gerenciador de músicas
-    private final GerenciadorMusicas gerenciadorMusicas;
+    private JButton btnAvaliar;
+    private JButton btnImportar;
+    private JButton btnComentar;
+    private JButton btnCancelar;    
+    
     // referência para o gerenciador de playlists
     private final GerenciadorPlaylists gerenciadorPlaylist;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
-    
-    private JTable tbMusicas;
 
     /**
-     * Constrói a tela de autenticação guardando a referência da tela principal
+     * Constrói a tela de filtro aguardando a referência da tela principal
      * e criando o gerenciador de usuários.
      * 
-     * @param l.
+     * @param 
      */
-    public TelaEditarPalavra(TelaPrincipal telaPrincipal) {
+    public TelaExibePlaylistLogado(TelaPrincipal telaPrincipal) {
         this.telaPrincipal = telaPrincipal;
-        gerenciadorMusicas = new GerenciadorMusicas();
         sessaoUsuario = SessaoUsuario.obterInstancia();
         gerenciadorPlaylist = new GerenciadorPlaylists();
     }
@@ -67,31 +57,10 @@ public class TelaEditarPalavra {
      * Inicializa a tela, construindo seus componentes, configurando os eventos
      * e, ao final, exibe a tela.
      */
-    public void inicializar() {
+    public void inicializar() {        
         construirTela();
         configurarEventosTela();
-        exibirTela();
-    }
-
-     private void construirTabela() {              
-        Object[] titulosColunas = {
-            I18N.obterRotuloPalavra()
-        };
-        // Lista utilizada para preencher a JTable com a lista de palavras da playlist
-        List<String[]> lista = new ArrayList<>();
-        
-        // Adiciona o palavra lista de preenchimento da Jtable
-         gerenciadorPlaylist.obterPlaylistTemporaria().getPalavras().stream().forEach((m) -> {
-            lista.add(new String[]{m});
-        });        
-               
-        // Modelo utilizado na Jtable de palavras
-        DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
-   
-        tbMusicas = new JTable();
-        tbMusicas.setModel(model);
-        tbMusicas.setPreferredScrollableViewportSize(new Dimension(300, 70));
-        tbMusicas.setFillsViewportHeight(true);
+        exibirTela();        
     }
     
     /**
@@ -110,72 +79,101 @@ public class TelaEditarPalavra {
         layout.setConstraints(c, gbc);
         janela.add(c);
     }
+    
+    /**
+     * Trata o estado inicial da tela
+     */
+     private void prepararComponentesEstadoInicial() {
+                
+        txaExibicao.setText(gerenciadorPlaylist.getPlaylistExibida());
+
+        txaExibicao.setEditable(false);
+       
+        btnAvaliar.setEnabled(true);
+        btnImportar.setEnabled(true);
+        btnComentar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+    }    
 
     /**
      * Adiciona os componentes da tela tratando layout e internacionalização
      */
     private void adicionarComponentes() {        
-        construirTabela();
-        JScrollPane scrollPaneTabela = new JScrollPane(tbMusicas);
-        adicionarComponente(scrollPaneTabela,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.NONE,
-                0, 0, 4, 1);
-        btnEntrar = new JButton(I18N.obterBotaoAdicionar(),
+
+        btnAvaliar = new JButton(I18N.obterBotaoAvaliar(),
                 GerenciadorDeImagens.OK);
         
-        btnExcluir = new JButton(I18N.obterBotaoExcluir(),
+        btnImportar = new JButton(I18N.obterBotaoImportar(),
+                GerenciadorDeImagens.OK);
+        
+        btnComentar = new JButton(I18N.obterBotaoComentar(),
                 GerenciadorDeImagens.OK);
 
         btnCancelar = new JButton(I18N.obterBotaoCancelar(),
                 GerenciadorDeImagens.CANCELAR);
         
-        txtPalavra = new JTextField(20);
-        adicionarComponente(txtPalavra,
+        txaExibicao = new JTextArea(25, 45);
+        
+        adicionarComponente(txaExibicao,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.NONE,
+                1, 0, 4, 1);
+        
+        JPanel painel1 = new JPanel();
+        
+        painel1.add(btnAvaliar);
+        painel1.add(btnImportar);
+        painel1.add(btnComentar);
+        painel1.add(btnCancelar);
+        
+        adicionarComponente(painel1,
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
                 2, 0, 4, 1);
-        
-        JPanel painelBotoes = new JPanel();
-        painelBotoes.add(btnEntrar);
-        painelBotoes.add(btnExcluir);
-        painelBotoes.add(btnCancelar);
-
-        adicionarComponente(painelBotoes,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.NONE,
-                3, 0, 2, 1);
+       
+        prepararComponentesEstadoInicial();
     }
 
     /**
      * Configura os eventos da tela.
      */
     private void configurarEventosTela() {
-        btnEntrar.addActionListener(new ActionListener() {
+        
+        btnAvaliar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                gerenciadorPlaylist.adicionarPalavra(txtPalavra.getText());
-                construirTabela();
+            public void actionPerformed(ActionEvent e) {                ;
                 janela.dispose();
                 inicializar();
             }
         });
         
-        btnExcluir.addActionListener(new ActionListener() {
+        btnImportar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gerenciadorPlaylist.removerPalavra(tbMusicas.getSelectedRow());
-                construirTabela();
+                if (sessaoUsuario.estahLogado()){
+
+                } else {
+              //      telaExibePlaylistNaoLogado.inicializar();
+                }
+              //  listaPalavras.removeAll(listaPalavras);
+                gerenciadorPlaylist.zerarExibida();
+                janela.dispose(); 
+            }
+        });
+        
+        btnComentar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
                 janela.dispose();
                 inicializar();
             }
         });
-
+        
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                janela.dispose();
+                gerenciadorPlaylist.zerarExibida();
+                janela.dispose();                
             }
         });
     }
@@ -202,5 +200,5 @@ public class TelaEditarPalavra {
         janela.setModal(true);
         janela.setVisible(true);
         janela.setResizable(false);
-    }
+    }          
 }

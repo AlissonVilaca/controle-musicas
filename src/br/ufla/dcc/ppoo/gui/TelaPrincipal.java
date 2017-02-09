@@ -31,7 +31,9 @@ public class TelaPrincipal {
     private final TelaMinhasMusicas telaMinhasMusicas;
     // tela de gestão das playlists
     private final TelaMinhasPlaylists telaMinhasPlaylists;
-
+    // tela de filtro de Playlists
+    private final TelaFiltroPlaylists telaFiltroPlaylists;
+    
     // janela da tela principal
     private JFrame janela;
 
@@ -53,10 +55,11 @@ public class TelaPrincipal {
     private JMenuItem menuLogout;
     private JMenuItem menuMinhasMusicas;
     private JMenuItem menuMinhasPlaylists;
+    private JMenuItem menuVisualizarPlaylists;
     
 
     /**
-     * Construtor; incializa as demais telas e sessão de usuário.
+     * Construtor incializa as demais telas e sessão de usuário.
      */
     public TelaPrincipal() {
         telaAutenticacao = new TelaAutenticacao(this);
@@ -64,6 +67,7 @@ public class TelaPrincipal {
         telaMinhasMusicas = new TelaMinhasMusicas(this);
         sessaoUsuario = SessaoUsuario.obterInstancia();
         telaMinhasPlaylists = new TelaMinhasPlaylists(this);
+        telaFiltroPlaylists = new TelaFiltroPlaylists(this);
     }
 
     /**
@@ -113,6 +117,13 @@ public class TelaPrincipal {
             @Override
             public void actionPerformed(ActionEvent e) {
                 telaAutenticacao.inicializar();
+            }
+        });
+        
+        menuVisualizarPlaylists.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                telaFiltroPlaylists.inicializar();
             }
         });
 
@@ -173,15 +184,16 @@ public class TelaPrincipal {
         menuLogout = new JMenuItem(I18N.obterMenuLogout(), GerenciadorDeImagens.LOGOUT);
         menuMinhasMusicas = new JMenuItem(I18N.obterMenuMinhasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
         menuMinhasPlaylists = new JMenuItem(I18N.obterMenuListasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
+        menuVisualizarPlaylists = new JMenuItem(I18N.obterMenuVisualizaPlaylist(), GerenciadorDeImagens.MINHAS_MUSICAS);
 
         if (!sessaoUsuario.estahLogado()) {
             menuInicio.add(menuEntrar);
             menuInicio.add(menuCadastrarUsuario);
-        } else {
-            // Aqui você poderá adicionar outros itens de menu, se necessário.
-
+            menuInicio.add(menuVisualizarPlaylists);
+        } else {             
             menuInicio.add(menuMinhasMusicas);
             menuInicio.add(menuMinhasPlaylists);
+            menuInicio.add(menuVisualizarPlaylists);
             menuInicio.add(menuLogout);
             
         }

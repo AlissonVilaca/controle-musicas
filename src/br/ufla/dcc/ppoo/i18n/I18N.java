@@ -45,7 +45,34 @@ public class I18N {
      * @return Nome do sistema.
      */
     public static String obterRotuloPalavraChave() {
-        return rb.getString("tela.minhasplaylists.palavra");
+        return rb.getString("tela.minhasplaylists.palavra.chave");
+    }
+    
+    /**
+     * Retorna o nome do sistema.
+     *
+     * @return Nome do sistema.
+     */
+    public static String obterRotuloPlaylist() {
+        return rb.getString("tela.playlist");
+    }
+    
+     /**
+     * Retorna o nome do sistema.
+     *
+     * @return Nome do sistema.
+     */
+    public static String obterRotuloUsuario() {
+        return rb.getString("tela.usuario");
+    }
+    
+    /**
+     * Retorna o nome do sistema.
+     *
+     * @return Nome do sistema.
+     */
+    public static String obterRotuloPalavra() {
+        return rb.getString("rotulo.playlist.palavra");
     }
     
     /**
@@ -110,6 +137,17 @@ public class I18N {
     public static String obterMenuCadastrarUsuario() {
         return rb.getString("menu.inicio.cadastrar");
     }
+    
+    /**
+     * Retorna o texto do menu Cadastrar Usuário.
+     *
+     * @return Texto do menu Cadastrar Usuário.
+     */
+    public static String obterMenuVisualizaPlaylist() {
+        return rb.getString("menu.inicio.visualizaplay");
+    }
+    
+    
 
     /**
      * Retorna o texto do menu Sair.
@@ -405,6 +443,51 @@ public class I18N {
      */
     public static String obterBotaoEntrar() {
         return rb.getString("botao.entrar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoAvaliar() {
+        return rb.getString("botao.avaliar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoImportar() {
+        return rb.getString("botao.importar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoComentar() {
+        return rb.getString("botao.comentar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoBuscar() {
+        return rb.getString("botao.buscar");
+    }
+    
+    /**
+     * Retorna o texto do botão Entrar (logar).
+     *
+     * @return Texto do botão Entrar (logar).
+     */
+    public static String obterBotaoSelecionar() {
+        return rb.getString("botao.selecionar");
     }
     
     /**

@@ -49,7 +49,7 @@ public interface PlaylistDAO {
      * @param m
      * @param selecionada 
      */
-    public void editarPlaylist(List<Musica> m, String selecionada);
+    public void editarPlaylist(List<Musica> m, String selecionada,boolean publi);
    
     /**
      * Remove uma Playlist
@@ -75,4 +75,28 @@ public interface PlaylistDAO {
      * @param titulo 
      */
     public void adicionarPalavra(String palavra);
+    
+    /**
+     * Faz a Busca de PLaylists com as palavras digitadas pelo usuario
+     * @param titulo 
+     */
+    public List<Playlist> buscaPlaylists(List<String> palavra);
+    
+    /**
+     * Seta a Playlist que o Usuario selecionou para ser exibida
+     * @param titulo 
+     */
+    public void setarExibida(Playlist palavra);
+    
+    /**
+     * Zera a Playlist "Exibida"
+     * @param titulo 
+     */
+    public void zerarExibida();
+    
+    /**
+     * Retorna a Playlist "Exibida"
+     * @param titulo 
+     */
+    public String getPlaylistExibida();
 }

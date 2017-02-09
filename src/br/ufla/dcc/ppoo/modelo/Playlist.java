@@ -16,12 +16,15 @@ public class Playlist {
     private List<String> listaPalavras;
     //lista de musicas da playlist
     private List<Musica> listaMusicas;
+    // visibilidade da paylist
+   private boolean visilidade;
     
-    public Playlist(String nome, Usuario usuario,  List<String> listaPalavras, List<Musica> listaMusicas){
+    public Playlist(String nome, Usuario usuario,  List<String> listaPalavras, List<Musica> listaMusicas, boolean visilidade){
         this.usuario = usuario;
         this.nome = nome;
         this.listaPalavras = listaPalavras; 
         this.listaMusicas = listaMusicas;
+        this.visilidade = visilidade;
     }
 
     public String getNome() {
@@ -30,6 +33,14 @@ public class Playlist {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public boolean isVisilidade() {
+        return visilidade;
+    }
+
+    public void setVisilidade(boolean visilidade) {
+        this.visilidade = visilidade;
     }
 
     public Usuario getUsuario() {

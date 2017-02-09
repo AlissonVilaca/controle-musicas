@@ -23,6 +23,8 @@ public class GerenciadorPlaylists {
     // objeto usado para recuperar a lista de musicas 
     private final PlaylistDAO playlist ;  
     
+    
+    
     private final GerenciadorMusicas gerenciadorMusicas;
                                     
     /**
@@ -97,22 +99,17 @@ public class GerenciadorPlaylists {
      * @param nome
      * @throws Exception 
      */
-    public void editarPlaylist(String selecionada,String nome) throws Exception {        
+    public void editarPlaylist(String selecionada,String nome,boolean publi) throws Exception {        
         playlist.obterPlaylistTemporaria().setNome(nome);
-      /*  System.out.println("NOme:"+playlist.obterPlaylistTemporaria().getNome());
-        for (Musica m : gerenciadorMusicas.obterSelecionadas()){
-            System.out.println(m.obterTitulo());
-        }*/
+        
         if (playlist.obterPlaylistTemporaria().getNome().equals(selecionada)){
-            playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada);
-            System.out.println("teste1");
+            playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada,publi);
         }else{
             boolean ret = playlist.comparaPlaylist();
             if (ret) {
                 throw new Exception(I18N.obterErroMusicaJaCadastrada());
             } else { 
-                System.out.println("teste2");
-                playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada);                   
+                playlist.editarPlaylist(gerenciadorMusicas.obterSelecionadas(),selecionada,publi);                   
             }   
         }               
     }
@@ -157,5 +154,36 @@ public class GerenciadorPlaylists {
         playlist.adicionarPalavra(palavra);
     }
     
+    /**
+     * Faz a Busca de PLaylists com as palavras digitadas pelo usuario
+     * @param titulo 
+     */
+    public List<Playlist> buscaPlaylists(List<String> palavra){
+       return playlist.buscaPlaylists(palavra);
+    }
+    
+    /**
+     * Seta a Playlist que o Usuario selecionou para ser exibida
+     * @param titulo 
+     */
+    public void setarExibida(Playlist palavra){
+       playlist.setarExibida(palavra);
+    }
+    
+
+    /**
+     * Zera a Playlist "Exibida"
+     * @param titulo 
+     */
+    public void zerarExibida(){
+       playlist.zerarExibida();
+    }
    
+    /**
+     * Retorna a Playlist "Exibida"
+     * @param titulo 
+     */
+    public String getPlaylistExibida(){
+       return playlist.getPlaylistExibida();
+    }
 }

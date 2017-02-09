@@ -22,6 +22,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -62,12 +63,13 @@ public class TelaMinhasPlaylists {
     // componentes da tela
     private JDialog janela;
     private GridBagLayout layout;
-    private GridBagConstraints gbc;
+    private GridBagConstraints gbc; 
     private JButton btnNovaMusica;
     private JButton btnEditarMusica;
     private JButton btnDeletarMusica;
     private JButton btnSalvarMusica;
     private JButton btnCancelar;
+    private JRadioButton rbtnPublico;
     
     private JButton btnAdicionarPalavra;
     private JButton btnAdicionarMusica;
@@ -123,7 +125,7 @@ public class TelaMinhasPlaylists {
             lista.add(new String[]{p.getNome(),p.getUsuario().obterNome()});
         });        
                
-        // Modelo utilizado na Jtable de playlists
+        // Modelo utilizado na Jtable de playlists 
         DefaultTableModel model = new DefaultTableModel(lista.toArray(new String[lista.size()][]), titulosColunas);
    
         // JTable recebe o modelo criado, com a listas de playlist do usuário
@@ -162,6 +164,7 @@ public class TelaMinhasPlaylists {
 
         txtNome.setEditable(false);
        
+        rbtnPublico.setEnabled(false);
         btnAdicionarMusica.setEnabled(false);
         btnAdicionarPalavra.setEnabled(false);
         btnExlcuirMusica.setEnabled(false);
@@ -177,7 +180,7 @@ public class TelaMinhasPlaylists {
      */
     private void prepararComponentesEstadoSelecaoMusica() {
         txtNome.setEditable(false);
-
+        
         btnNovaMusica.setEnabled(true);
         btnEditarMusica.setEnabled(true);
         btnSalvarMusica.setEnabled(false);
@@ -196,6 +199,8 @@ public class TelaMinhasPlaylists {
 
         txtNome.setEditable(true);
         
+        rbtnPublico.setSelected(false);
+        rbtnPublico.setEnabled(true);
         btnAdicionarMusica.setEnabled(true);
         btnAdicionarPalavra.setEnabled(true);
         btnExlcuirMusica.setEnabled(true);
@@ -214,6 +219,7 @@ public class TelaMinhasPlaylists {
         
         txtNome.setEditable(true);
         
+        rbtnPublico.setEnabled(true);
         btnAdicionarMusica.setEnabled(true);
         btnAdicionarPalavra.setEnabled(true);
         btnExlcuirMusica.setEnabled(true);
@@ -268,9 +274,12 @@ public class TelaMinhasPlaylists {
         
         btnAdicionarPalavra = new JButton(I18N.obterBotaoAdicionar(),
                 GerenciadorDeImagens.NOVO);
+                        
+        rbtnPublico = new JRadioButton("Pública");
         
-        JPanel painel = new JPanel();;
+        JPanel painel = new JPanel();
         painel.add(btnAdicionarPalavra);
+        painel.add(rbtnPublico);
 
         adicionarComponente(painel,
                 GridBagConstraints.LINE_START,
@@ -284,7 +293,7 @@ public class TelaMinhasPlaylists {
                 GerenciadorDeImagens.NOVO);
         
         
-        JPanel painelBotoes1 = new JPanel();
+        JPanel painelBotoes1 = new JPanel();        
         painelBotoes1.add(btnAdicionarMusica);
         painelBotoes1.add(btnExlcuirMusica);
 
@@ -339,6 +348,7 @@ public class TelaMinhasPlaylists {
         gerenciadorPlaylists.setarEditada(m);        
         gerenciadorMusicas.marcarMusicas(m);
         selecionada = m.getNome();
+        rbtnPublico.setSelected(m.isVisilidade());
         novo = false; 
         txtNome.setText(m.getNome());
     }
@@ -390,7 +400,8 @@ public class TelaMinhasPlaylists {
                 selecionada = txtNome.getText();                
                 Playlist p = new Playlist(selecionada, sessaoUsuario.obterUsuario(), 
                         gerenciadorPlaylists.obterPalavras(sessaoUsuario.obterUsuario(), selecionada), 
-                        gerenciadorPlaylists.obterMusicas(sessaoUsuario.obterUsuario(), selecionada));                
+                        gerenciadorPlaylists.obterMusicas(sessaoUsuario.obterUsuario(), selecionada),
+                        rbtnPublico.isSelected());                
                 gerenciadorPlaylists.setarEditada(p);
                 gerenciadorMusicas.marcarMusicas(p);
                 prepararComponentesEstadoEditouMusica();     
@@ -400,11 +411,7 @@ public class TelaMinhasPlaylists {
 
         btnSalvarMusica.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                /*gerenciadorPlaylists.setarEditada(new Playlist(txtNome.getText(),
-                        sessaoUsuario.obterUsuario(), 
-                        listaPalavrasTemporaria, 
-                        listaMusicasTemporaria));  */                               
+            public void actionPerformed(ActionEvent e) {                               
                 try{                                                    
                     if (txtNome.getText() == ""){  //Faz o tratamento de erro caso seja inserido um ano inválido           
                         throw new Exception(I18N.obterErroAnoInvalido());
@@ -415,15 +422,22 @@ public class TelaMinhasPlaylists {
                     } else{ 
                         if (novo) { 
                             //preenche a playlist temporaria com os dados da tela
+                            boolean publi;
+                            if (rbtnPublico.isSelected()){
+                                publi = true;
+                            } else {                                
+                                publi = false;
+                            }
                             gerenciadorPlaylists.setarEditada(new Playlist(txtNome.getText(),
                             sessaoUsuario.obterUsuario(), 
                             listaPalavrasTemporaria, 
-                            listaMusicasTemporaria)); 
+                            listaMusicasTemporaria,
+                            publi)); 
                             //Cadastra a playlist
                             gerenciadorPlaylists.cadastrarPlaylist();
                         } else {
-                            //Edita a PLaylist
-                            gerenciadorPlaylists.editarPlaylist(selecionada,txtNome.getText());
+                            //Edita a PLaylist                            
+                            gerenciadorPlaylists.editarPlaylist(selecionada,txtNome.getText(),rbtnPublico.isSelected());
                         } 
                             }
                 } catch (Exception ex) {
@@ -444,7 +458,7 @@ public class TelaMinhasPlaylists {
                 listaMusicasTemporaria = new ArrayList<Musica>();
                 novo = true;
                 //seta a playlist temporario com uma nova playlist em branco
-                gerenciadorPlaylists.setarEditada(new Playlist("", sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria));         
+                gerenciadorPlaylists.setarEditada(new Playlist("", sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria,false));         
                 prepararComponentesEstadoNovaMusica(); 
                 gerenciadorMusicas.desmarcarMusicas();
             }
