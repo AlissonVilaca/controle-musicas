@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,7 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Tela de Filtro de PLaylists
+ * Tela de Filtro de Playlists
  * @author alisson-vilaca
  */
 public class TelaFiltroPlaylists {
@@ -44,6 +45,7 @@ public class TelaFiltroPlaylists {
     private JButton btnAdicionar;
     private JButton btnSelecionar;
     private JButton btnCancelar;
+    private JLabel lbPalavras;
     
     //lista de palavras que seão usadas na busca
     private List<String> listaPalavras;
@@ -177,10 +179,17 @@ public class TelaFiltroPlaylists {
         btnAdicionar = new JButton(I18N.obterBotaoAdicionar(),
                 GerenciadorDeImagens.OK);
         
+        lbPalavras = new JLabel(I18N.obterLabelPalavra()); // em inglês fica melhor rs
+        
+         adicionarComponente(lbPalavras,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.NONE,
+                1, 0, 4, 1);
+        
         JPanel painel1 = new JPanel();
         
         painel1.add(txtPalavra);
-        painel1.add(btnAdicionar);
+        painel1.add(btnAdicionar);                
         
         adicionarComponente(painel1,
                 GridBagConstraints.CENTER,
@@ -205,15 +214,15 @@ public class TelaFiltroPlaylists {
      * Trata a seleção de playlist na grade.
      */
     private void selecionouMusica() {        
-        //É usado uma lista auxiliar que recebe somente as playlists do usuario 
-        //atual para preencher os componentes
+        //É usado uma lista auxiliar que recebe as playlists que contem qualquer 
+        //uma das palavras digitadas pelo usuario ou no nome ou nas palavras-chave
 
         List<Playlist> lista = new ArrayList<>();       
         lista = gerenciadorPlaylist.buscaPlaylists(listaPalavras);
 
         Playlist m = lista.get(tbMusicas.getSelectedRow());                
         //Seta a lista temporaria que será exibida
-        gerenciadorPlaylist.setarExibida(m);                
+        gerenciadorPlaylist.setarExibida(m);   //seta a variavel de musica exibida como a musica que o usuario selecionou na tabela             
     }
     
     /**
@@ -221,7 +230,7 @@ public class TelaFiltroPlaylists {
      */
     private void configurarEventosTela() {
         
-        btnAdicionar.addActionListener(new ActionListener() {
+        btnAdicionar.addActionListener(new ActionListener() {//permite que sejam adicionadas palavras para a busca
             @Override
             public void actionPerformed(ActionEvent e) {                
                 listaPalavras.add(txtPalavra.getText());
@@ -246,7 +255,7 @@ public class TelaFiltroPlaylists {
             }
         });
 
-        tbMusicas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tbMusicas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {//chama a proximo tela de exibição da playlist
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 prepararComponentesEstadoBuscou();

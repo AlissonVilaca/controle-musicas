@@ -742,8 +742,57 @@ public class I18N {
         return rb.getString("erro.playlist.musicas");
     }
     
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterErroImportarPlaylist() {
+        return rb.getString("erro.playlist.importar");
+    }       
     
-            
-            
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterLabelPalavra() {
+        return rb.getString("label.palavra");
+    }   
     
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String erroAvaliarMesmoUsuario() {
+        return rb.getString("erro.mesmoUsuario");
+    }     
+       
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String erroPontuacaoInvalida() {
+        return rb.getString("erro.pontuacao.invalida");
+    } 
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String erroUsuarioJaAvaliou() {
+        return rb.getString("erro.avaliou");
+    } 
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterPlaylistAvaliadaSucesso() {
+        return rb.getString("sucesso.avaliou");
+    }     
 }

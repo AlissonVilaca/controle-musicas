@@ -14,11 +14,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
- *
+ * Tela que exibe uma playlist buscada e permite importa-la, comenta-la e avalia-la
  * @author alisson-vilaca
  */
 public class TelaExibePlaylistLogado {
@@ -41,7 +42,7 @@ public class TelaExibePlaylistLogado {
     private final GerenciadorPlaylists gerenciadorPlaylist;
     // objeto de controle de sessão (autenticação) do usuário
     private final SessaoUsuario sessaoUsuario;
-    //
+    // referencia para a tela minhas playlists
     private final TelaMinhasPlaylists telaMinhasPlaylists;
 
     /**
@@ -143,9 +144,21 @@ public class TelaExibePlaylistLogado {
      */
     private void configurarEventosTela() {
         
-        btnAvaliar.addActionListener(new ActionListener() {
+        btnAvaliar.addActionListener(new ActionListener() { //permite a avaliação do usuario
             @Override
-            public void actionPerformed(ActionEvent e) {                ;
+            public void actionPerformed(ActionEvent e) {                
+                String t = JOptionPane.showInputDialog("Digite a pontuação de 0 a 5");
+                int pont = Integer.parseInt(t);
+                if (pont>=0 && pont <= 5){
+                    if (gerenciadorPlaylist.getExibida().getUsuario() == sessaoUsuario.obterUsuario() ){
+                        Utilidades.msgErro(I18N.erroAvaliarMesmoUsuario());
+                    } else {
+                        gerenciadorPlaylist.pontuar(pont,sessaoUsuario.obterUsuario());
+                        Utilidades.msgInformacao(I18N.obterPlaylistAvaliadaSucesso());
+                   }                    
+                } else {
+                    Utilidades.msgErro(I18N.erroPontuacaoInvalida());
+                }                
                 janela.dispose();
                 inicializar();
             }
@@ -154,12 +167,12 @@ public class TelaExibePlaylistLogado {
         btnImportar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (sessaoUsuario.obterUsuario() != gerenciadorPlaylist.getExibida().getUsuario()){
-                    gerenciadorPlaylist.setImportou(true);
+                if (sessaoUsuario.obterUsuario() != gerenciadorPlaylist.getExibida().getUsuario()){ // verifica se o usuario não está tentando importar sua própria playlist
+                    gerenciadorPlaylist.setImportou(true); //marca uma bool para que a Tela Minhas Playlists seja inciada corretamente
                     janela.dispose();
-                    telaMinhasPlaylists.inicializar();    
+                    telaMinhasPlaylists.inicializar();    //Inicializa o cadastro da playlist
                 } else {
-                    Utilidades.msgErro("Você não pode Importar uma lista sua!");
+                    Utilidades.msgErro(I18N.obterErroImportarPlaylist());
                 }    
             }
         });

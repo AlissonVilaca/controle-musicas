@@ -66,47 +66,75 @@ public interface PlaylistDAO {
     
     /**
      * Remove palavra da lista de palavras da playlist
-     * @param titulo 
+     *  
      */
     public void removerPalavra(int indice);
     
     /**
      * Adiciona palavra da lista de palavras da playlist
-     * @param titulo 
+     * 
      */
     public void adicionarPalavra(String palavra);
     
     /**
      * Faz a Busca de PLaylists com as palavras digitadas pelo usuario
-     * @param titulo 
+     * 
      */
     public List<Playlist> buscaPlaylists(List<String> palavra);
     
     /**
      * Seta a Playlist que o Usuario selecionou para ser exibida
-     * @param titulo 
+     * 
      */
     public void setarExibida(Playlist palavra);
     
     /**
      * Zera a Playlist "Exibida"
-     * @param titulo 
+     *  
      */
     public void zerarExibida();
     
     /**
      * Retorna a Playlist "Exibida"
-     * @param titulo 
+     *
      */
     public String getPlaylistExibida();
     
+    /**
+     * Returna se a playlist está sendo importada
+     * @return 
+     */
     public boolean isImportou();
     
+    /**
+     * Seta a playlist como importada ou não
+     * @param importou 
+     */
     public void setImportou(boolean importou);
     
+    /**
+     * Adiciona as músicas da playlist importada no usuario atual
+     * @param atual 
+     */
     public void arrumaMusicasImportadas(Usuario atual);
     
+    /**
+     * Retorna a lista que vai ser importada
+     * @return 
+     */
     public Playlist getExibida();
     
-    public List<Musica> getMusicasImportadas(Usuario atual);
+    /**
+     * Retorna as musicas que foram importadas na lista geral de músicas para serem
+     * adicionadas na playlist
+     * @param atual
+     * @return 
+     */
+    public List<Musica> getMusicasImportadas(Usuario atual); 
+    
+    /**
+     * Adiciona a pontuacao informada à playlist atual;
+     * @param pont 
+     */
+    public void pontuar(int pont,Usuario atual);
 }

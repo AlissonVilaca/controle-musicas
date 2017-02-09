@@ -1,10 +1,12 @@
 package br.ufla.dcc.ppoo.dao.lista;
 
 import br.ufla.dcc.ppoo.dao.PlaylistDAO;
+import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
+import br.ufla.dcc.ppoo.util.Utilidades;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -211,7 +213,9 @@ public class PlaylistDAOLista implements PlaylistDAO {
         exibida.setListaPalavras(palavra.getPalavras());
         exibida.setListaMusicas(palavra.getMusicas());
         exibida.setUsuario(palavra.getUsuario());
-        exibida.setVisilidade(exibida.isVisilidade());
+        exibida.setVisilidade(palavra.isVisilidade());
+        exibida.setUsuariosQueAvaliaram(palavra.getUsuariosQueAvaliaram());
+        exibida.setPontuacao(palavra.getPontuacao());
     }
     
     /**
@@ -228,11 +232,21 @@ public class PlaylistDAOLista implements PlaylistDAO {
     
     /**
      * Retorna a Playlist "Exibida"
-     * @param titulo 
+     * 
      */
     public String getPlaylistExibida(){
         String texto = new String();
-            texto = "Lista: " + exibida.getNome() + 
+        String pont = "";
+        if (exibida.getPontuacao() >999 && exibida.getPontuacao() <1000000) {
+            int i = exibida.getPontuacao()/1000;
+            pont = i+"k";
+        } else if (exibida.getPontuacao() > 999999){
+            int i = exibida.getPontuacao()/1000000;
+            pont = i+"mi";
+        } else {
+            pont = ""+exibida.getPontuacao();
+        }
+            texto = "Lista: " + exibida.getNome() + "\t\t" + pont +
                     "\nAutor: " + exibida.getUsuario().obterNome() +
                     "\nPalavras-chave: ";
             for (int i = 0; i < exibida.getPalavras().size(); i++) {
@@ -248,19 +262,30 @@ public class PlaylistDAOLista implements PlaylistDAO {
                 int j = i+1;
                 texto+= "     " + j +"."+exibida.getMusicas().get(i).obterTitulo()+
                         " (" + exibida.getMusicas().get(i).obterArtista() + ")\n";
-            }
-                          
+            }                          
         return texto;
     }
 
+    /**
+     * Returna se a playlist está sendo importada
+     * @return 
+     */
     public boolean isImportou() {
         return importou;
     }
 
+    /**
+     * Seta a playlist como importada ou não
+     * @param importou 
+     */
     public void setImportou(boolean importou) {
         this.importou = importou;
     }  
     
+    /**
+     * Adiciona as músicas da playlist importada no usuario atual
+     * @param atual 
+     */
     public void arrumaMusicasImportadas(Usuario atual) {                                
         for (Musica u : exibida.getMusicas()){
             if (!gerenciadorMusicas.verificaMusicas(u,atual)){
@@ -275,10 +300,20 @@ public class PlaylistDAOLista implements PlaylistDAO {
         }
     } 
     
+    /**
+     * Retorna a lista que vai ser importada
+     * @return 
+     */
     public Playlist getExibida() {
         return exibida;
     }
     
+    /**
+     * Retorna as musicas que foram importadas na lista geral de músicas para serem
+     * adicionadas na playlist
+     * @param atual
+     * @return 
+     */
     public List<Musica> getMusicasImportadas(Usuario atual){
         List<Musica> mu= new ArrayList<>();
         for (Musica u : exibida.getMusicas()){
@@ -287,4 +322,29 @@ public class PlaylistDAOLista implements PlaylistDAO {
         
         return mu;    
     }
+    
+    /**
+     * Adiciona a pontuacao informada à playlist atual;
+     * @param pont 
+     */
+    public void pontuar(int pont,Usuario atual){
+        boolean avaliou = false;
+        for (Usuario u : exibida.getUsuariosQueAvaliaram()){
+            if (u == atual){
+                avaliou = true;
+            }
+        }
+        if (avaliou){
+            Utilidades.msgErro(I18N.erroUsuarioJaAvaliou());
+        } else {
+            for (Playlist p : listaPlaylist) {
+                if (p.getNome().equals(exibida.getNome()) && p.getUsuario() == exibida.getUsuario()){
+                    p.pontuar(pont);
+                    p.adicionarUsuario(atual);
+                }
+            }            
+            exibida.pontuar(pont);
+        }        
+
+    } 
 }

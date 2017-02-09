@@ -17,7 +17,11 @@ public class Playlist {
     //lista de musicas da playlist
     private List<Musica> listaMusicas;
     // visibilidade da paylist
-   private boolean visilidade;
+    private boolean visilidade;
+    // pontuação da playlist
+    private int pontuacao;
+    //Lista de Usuarios que já avaliaram
+    private List<Usuario> usuariosQueAvaliaram;
     
     public Playlist(String nome, Usuario usuario,  List<String> listaPalavras, List<Musica> listaMusicas, boolean visilidade){
         this.usuario = usuario;
@@ -25,6 +29,8 @@ public class Playlist {
         this.listaPalavras = listaPalavras; 
         this.listaMusicas = listaMusicas;
         this.visilidade = visilidade;
+        pontuacao = 0;
+        usuariosQueAvaliaram = new ArrayList<Usuario>();
     }
 
     public String getNome() {
@@ -92,8 +98,44 @@ public class Playlist {
             return true;
         } else {            
             return false;
-        }   
-        
+        }           
     }
+    
+    /**
+     * Incrementa a pontuação dalista de acordo com o parametro
+     * @param pontuacao 
+     */
+    public void pontuar(int pontuacao){
+        this.pontuacao += pontuacao;    
+    }
+    
+    /**
+     * Retorna a pontuação da Lista
+     * @return 
+     */
+    public int getPontuacao() {
+        return pontuacao;
+    }
+    
+    /**
+     * Adiciona o usuario do parâmetro à lista de usuarios que avaliaram
+     * @param u 
+     */
+    public void adicionarUsuario(Usuario u){
+        usuariosQueAvaliaram.add(u);
+    }
+
+    public List<Usuario> getUsuariosQueAvaliaram() {
+        return usuariosQueAvaliaram;
+    }
+
+    public void setUsuariosQueAvaliaram(List<Usuario> usuariosQueAvaliaram) {
+        this.usuariosQueAvaliaram = usuariosQueAvaliaram;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+    
     
 }

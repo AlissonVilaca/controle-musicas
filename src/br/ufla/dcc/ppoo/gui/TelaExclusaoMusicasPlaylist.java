@@ -144,15 +144,6 @@ public class TelaExclusaoMusicasPlaylist {
     }
 
     /**
-     * Retorna um novo usuário a partir do login e senha passados.
-     * 
-     * @return Usuário criado.
-     */
-    private Usuario carregarUsuario() {
-        return new Usuario(txtLogin.getText(), txtSenha.getPassword());
-    }
-
-    /**
      * Configura os eventos da tela.
      */
     private void configurarEventosTela() {

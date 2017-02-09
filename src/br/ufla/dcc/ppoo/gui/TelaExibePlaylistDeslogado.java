@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
- *
+ * Tela que exibe a busca de uma playlist quando não existe usuario logado. Fiz 
+ * desta forma pois estava com problemas em puxar o estado inicial dos botões de
+ * maneira correta
  * @author aluno
  */
 public class TelaExibePlaylistDeslogado {

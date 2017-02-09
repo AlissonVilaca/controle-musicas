@@ -139,15 +139,14 @@ public class GerenciadorPlaylists {
     
     /**
      * Remove palavra da lista de palavras da playlist
-     * @param titulo 
+     * 
      */
     public void removerPalavra(int indice){
         playlist.removerPalavra(indice);
     }
     
     /**
-     * Adiciona palavra da lista de palavras da playlist
-     * @param titulo 
+     * Adiciona palavra da lista de palavras da playlist 
      */
     public void adicionarPalavra(String palavra){
         playlist.adicionarPalavra(palavra);
@@ -155,7 +154,6 @@ public class GerenciadorPlaylists {
     
     /**
      * Faz a Busca de PLaylists com as palavras digitadas pelo usuario
-     * @param titulo 
      */
     public List<Playlist> buscaPlaylists(List<String> palavra){
        return playlist.buscaPlaylists(palavra);
@@ -163,7 +161,6 @@ public class GerenciadorPlaylists {
     
     /**
      * Seta a Playlist que o Usuario selecionou para ser exibida
-     * @param titulo 
      */
     public void setarExibida(Playlist palavra){
        playlist.setarExibida(palavra);
@@ -172,7 +169,6 @@ public class GerenciadorPlaylists {
 
     /**
      * Zera a Playlist "Exibida"
-     * @param titulo 
      */
     public void zerarExibida(){
        playlist.zerarExibida();
@@ -180,29 +176,59 @@ public class GerenciadorPlaylists {
    
     /**
      * Retorna a Playlist "Exibida"
-     * @param titulo 
+     * @return 
      */
     public String getPlaylistExibida(){
        return playlist.getPlaylistExibida();
     }
     
+    /**
+     * Returna se a playlist está sendo importada
+     * @return 
+     */
     public boolean isImportou() {
         return playlist.isImportou();
     }
 
+    /**
+     * Seta a playlist como importada ou não
+     * @param importou 
+     */
     public void setImportou(boolean importou) {
         playlist.setImportou(importou);
     }
     
+    /**
+     * Adiciona as músicas da playlist importada no usuario atual
+     * @param atual 
+     */
     public void arrumaMusicasImportadas(Usuario atual) {
         playlist.arrumaMusicasImportadas(atual);
     }
     
+    /**
+     * Retorna a lista que vai ser importada
+     * @return 
+     */
     public Playlist getExibida() {
         return playlist.getExibida();
     }
     
+    /**
+     * Retorna as musicas que foram importadas na lista geral de músicas para serem
+     * adicionadas na playlist
+     * @param atual
+     * @return 
+     */
     public List<Musica> getMusicasImportadas(Usuario atual){
         return playlist.getMusicasImportadas(atual);    
     }
+    
+    /**
+     * Adiciona a pontuacao informada à playlist atual;
+     * @param pont 
+     */
+    public void pontuar(int pont,Usuario atual){
+        playlist.pontuar(pont,atual);
+    } 
 }

@@ -329,8 +329,8 @@ public class TelaMinhasPlaylists {
                 GridBagConstraints.CENTER,
                 GridBagConstraints.NONE,
                 6, 0, 4, 1);
-        if (!gerenciadorPlaylists.isImportou()){
-            prepararComponentesEstadoInicial();
+        if (!gerenciadorPlaylists.isImportou()){//se uma musica não está sendo importada abre a tela normalmente, se não 
+            prepararComponentesEstadoInicial(); // a tela é preparada com a playlist que vai ser importada 
         } else {
             prepararComponentesEstadoEditouMusica();   
             arrumaImportada();
@@ -358,9 +358,9 @@ public class TelaMinhasPlaylists {
         txtNome.setText(m.getNome());
     }
 
-    private void arrumaImportada(){
+    private void arrumaImportada(){ // meodo que organiza a tela çom a playlist que está sendo importada
         //Importa todas as musicas com nome diferente das já cadastradas pelo usuario
-        gerenciadorPlaylists.arrumaMusicasImportadas(sessaoUsuario.obterUsuario());
+        gerenciadorPlaylists.arrumaMusicasImportadas(sessaoUsuario.obterUsuario()); 
                         
         tbPlaylists.disable();
         Playlist p = gerenciadorPlaylists.getExibida();
@@ -376,28 +376,7 @@ public class TelaMinhasPlaylists {
         gerenciadorMusicas.marcarMusicas(nova);
         novo = true;
         rbtnPublico.setSelected(nova.isVisilidade());
-        gerenciadorPlaylists.zerarExibida();
-        
-      
-      
-      
-              // listaPalavrasTemporaria = new ArrayList<String>();
-             //   listaMusicasTemporaria = new ArrayList<Musica>();
-              //  novo = true;
-                //seta a playlist temporario com uma nova playlist em branco
-        /*gerenciadorPlaylists.setarEditada(new Playlist(, sessaoUsuario.obterUsuario(), listaPalavrasTemporaria, listaMusicasTemporaria,false));         
-                prepararComponentesEstadoNovaMusica(); 
-                gerenciadorMusicas.desmarcarMusicas();
-        
-        
-        
-        gerenciadorPlaylists.setarEditada(m);        
-        gerenciadorMusicas.marcarMusicas(m);
-        selecionada = m.getNome();
-        rbtnPublico.setSelected(m.isVisilidade());
-        novo = false; 
-        txtNome.setText(m.getNome());*/
-        
+        gerenciadorPlaylists.zerarExibida();        
         
     }
     
@@ -523,7 +502,7 @@ public class TelaMinhasPlaylists {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoDeletar())) {
-                    // chama o método remover musica da PlaylistDAOLista
+                    // chama o método remover playlist da PlaylistDAOLista
                     gerenciadorPlaylists.removerPlaylist(txtNome.getText());
                     Utilidades.msgInformacao(I18N.obterSucessoRemocaoPlaylist());
                     atualizaTabela();

@@ -168,7 +168,12 @@ public class Musica {
             return (false);
         }        
     }
-    
+     /**
+     * Verifica se a musica tem o mesmo nome e usuario da musica passada por referencia
+     * @param musica
+     * @param atual
+     * @return 
+     */
     public boolean verificaMusicas(String musica, Usuario atual){
         if ((titulo.equals(musica)) && (usuario.obterNome().equals(atual.obterNome()))){
             return (true);

@@ -244,8 +244,7 @@ public class MusicaDAOLista implements MusicaDAO{
         for (Musica m : listaMusica){
             if (m.estaMarcada()){
                 i++;
-            }
-                
+            }                
         }
         if (i < 2) {
             return true;
@@ -254,6 +253,12 @@ public class MusicaDAOLista implements MusicaDAO{
         }
     }
     
+    /**
+     * Faz a busca de uma musica pelo nome e usuario passados
+     * @param u
+     * @param atual
+     * @return 
+     */
     public Musica buscaMusicasPeloNome(Musica u,Usuario atual){        
         Musica musica;
         for (Musica l : listaMusica) {
@@ -264,6 +269,12 @@ public class MusicaDAOLista implements MusicaDAO{
         return new Musica("testelol", "teste", 0, "teste", "letra", atual);
     }
     
+    /**
+     * Verifica seuma musica ja esta cadastrada para o usuario do parâmetro
+     * @param musica
+     * @param atual
+     * @return 
+     */
     public boolean verificaMusicas(Musica musica, Usuario atual){
         for (Musica u : listaMusica) {
             if(musica.verificaMusicas(u.obterTitulo(),atual)){

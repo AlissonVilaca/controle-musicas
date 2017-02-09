@@ -111,7 +111,19 @@ public interface MusicaDAO {
      */
     public boolean musicasInsuficientes();
     
+    /**
+     * Faz a busca de uma musica pelo nome e usuario passados
+     * @param u
+     * @param atual
+     * @return 
+     */
     public Musica buscaMusicasPeloNome(Musica u,Usuario atual);
     
+    /**
+     * Verifica seuma musica ja esta cadastrada para o usuario do parâmetro
+     * @param musica
+     * @param atual
+     * @return 
+     */
     public boolean verificaMusicas(Musica musica, Usuario atual);
 }
