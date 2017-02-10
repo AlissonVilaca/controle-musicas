@@ -385,16 +385,17 @@ public class TelaMinhasMusicas {
                             // chama o método adicionar musica da MúsicaDAOLista
                             gerenciadorMusicas.cadastrarMusica(mus);
                             Utilidades.msgInformacao(I18N.obterSucessoCadastroMusica());
+                            atualizaTabela();
                         } else {
                             // chama o método editar musica da MúsicaDAOLista
                             gerenciadorMusicas.alterarMusica(mus,selecionada);
                             Utilidades.msgInformacao(I18N.obterSucessoAlteracaoMusica());
+                            atualizaTabela();
                         }
                     }
                 } catch (Exception ex) {
                     Utilidades.msgErro(ex.getMessage());  
-                }    
-                atualizaTabela();
+                }                    
             }
         });
 

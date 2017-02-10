@@ -466,11 +466,15 @@ public class TelaMinhasPlaylists {
                             gerenciadorPlaylists.cadastrarPlaylist();
                             gerenciadorPlaylists.setImportou(false);
                             Utilidades.msgInformacao(I18N.obterSucessoCadastroPlaylist());
+                            gerenciadorMusicas.desmarcarMusicas();
+                            atualizaTabela();
                         } else {
                             //Edita a PLaylist                            
                             gerenciadorPlaylists.editarPlaylist(selecionada,txtNome.getText(),rbtnPublico.isSelected());
                             gerenciadorPlaylists.setImportou(false);
                             Utilidades.msgInformacao(I18N.obterSucessoEdicaoPlaylist());
+                            gerenciadorMusicas.desmarcarMusicas();
+                            atualizaTabela();
                         } 
                             }
                 } catch (Exception ex) {
@@ -478,8 +482,8 @@ public class TelaMinhasPlaylists {
                     Utilidades.msgErro(ex.getMessage());  
                 }    
                 //desmarca as musicas que estavam selecionadas durante o salvamento
-                gerenciadorMusicas.desmarcarMusicas();
-                atualizaTabela();
+                //gerenciadorMusicas.desmarcarMusicas();
+                //atualizaTabela();
             }
         });
 
