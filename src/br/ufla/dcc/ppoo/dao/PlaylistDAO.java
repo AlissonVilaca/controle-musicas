@@ -137,4 +137,11 @@ public interface PlaylistDAO {
      * @param pont 
      */
     public void pontuar(int pont,Usuario atual);
+    
+    /**
+     * Adiciona comentario à playlist atual;
+     * @param comentario Comentario a ser adicionado
+     * @param atual Usuario que fez o comentário
+     */
+    public void comentar (String comentario, Usuario atual);
 }

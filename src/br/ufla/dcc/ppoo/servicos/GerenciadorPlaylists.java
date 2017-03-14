@@ -21,9 +21,7 @@ public class GerenciadorPlaylists {
     // logado atualmente
     private final SessaoUsuario sessaoUsuario;
     // objeto usado para recuperar a lista de musicas 
-    private final PlaylistDAO playlist ;  
-    
-    
+    private final PlaylistDAO playlist ;          
     
     private final GerenciadorMusicas gerenciadorMusicas;
                                     
@@ -164,8 +162,7 @@ public class GerenciadorPlaylists {
      */
     public void setarExibida(Playlist palavra){
        playlist.setarExibida(palavra);
-    }
-    
+    }    
 
     /**
      * Zera a Playlist "Exibida"
@@ -226,9 +223,18 @@ public class GerenciadorPlaylists {
     
     /**
      * Adiciona a pontuacao informada à playlist atual;
-     * @param pont 
+     * @param pont Pontuação a ser adicionada
      */
     public void pontuar(int pont,Usuario atual){
         playlist.pontuar(pont,atual);
     } 
+    
+    /**
+     * Adiciona comentario à playlist atual;
+     * @param comentario Comentario a ser adicionado
+     * @param atual Usuario que fez o comentário
+     */
+    public void comentar(String comentario,Usuario atual){
+        playlist.comentar(comentario,atual);
+    }
 }

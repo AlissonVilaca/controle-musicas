@@ -1,6 +1,8 @@
 package br.ufla.dcc.ppoo.modelo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /** Representa uma playlist no sistema
@@ -22,6 +24,8 @@ public class Playlist {
     private int pontuacao;
     //Lista de Usuarios que já avaliaram
     private List<Usuario> usuariosQueAvaliaram;
+    //Lista de comentários da Playlist
+    private List<Comentario> listaComentarios;
     
     public Playlist(String nome, Usuario usuario,  List<String> listaPalavras, List<Musica> listaMusicas, boolean visilidade){
         this.usuario = usuario;
@@ -31,6 +35,7 @@ public class Playlist {
         this.visilidade = visilidade;
         pontuacao = 0;
         usuariosQueAvaliaram = new ArrayList<Usuario>();
+        listaComentarios = new ArrayList<Comentario>();
     }
 
     public String getNome() {
@@ -62,11 +67,11 @@ public class Playlist {
     }
 
     public List<String> getPalavras() {
-        return listaPalavras;
+        return Collections.unmodifiableList(listaPalavras);
     }
     
     public List<Musica> getMusicas() {
-        return listaMusicas;
+        return Collections.unmodifiableList(listaMusicas);
     }
 
     public void setListaPalavras(List<String> listaPalavras) {
@@ -82,8 +87,7 @@ public class Playlist {
             if (u == m){
                 listaMusicas.remove(u);
             }
-        }
-    
+        }    
     }
     
     /**
@@ -126,7 +130,7 @@ public class Playlist {
     }
 
     public List<Usuario> getUsuariosQueAvaliaram() {
-        return usuariosQueAvaliaram;
+        return Collections.unmodifiableList(usuariosQueAvaliaram);
     }
 
     public void setUsuariosQueAvaliaram(List<Usuario> usuariosQueAvaliaram) {
@@ -135,6 +139,21 @@ public class Playlist {
 
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+    
+    public void comentar(Comentario c) {
+        listaComentarios.add(c);
+        for (Comentario g : listaComentarios){
+            System.out.println(g.getComentario());
+        }
+    }
+    
+    public List<Comentario> getComentarios(){        
+        return Collections.unmodifiableList(listaComentarios);
+    }
+
+    public void setListaComentarios(List<Comentario> listaComentarios) {
+        this.listaComentarios = listaComentarios;
     }
     
     

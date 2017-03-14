@@ -2,6 +2,7 @@ package br.ufla.dcc.ppoo.dao.lista;
 
 import br.ufla.dcc.ppoo.dao.PlaylistDAO;
 import br.ufla.dcc.ppoo.i18n.I18N;
+import br.ufla.dcc.ppoo.modelo.Comentario;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
@@ -216,6 +217,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
         exibida.setVisilidade(palavra.isVisilidade());
         exibida.setUsuariosQueAvaliaram(palavra.getUsuariosQueAvaliaram());
         exibida.setPontuacao(palavra.getPontuacao());
+        exibida.setListaComentarios(palavra.getComentarios());
     }
     
     /**
@@ -262,7 +264,32 @@ public class PlaylistDAOLista implements PlaylistDAO {
                 int j = i+1;
                 texto+= "     " + j +"."+exibida.getMusicas().get(i).obterTitulo()+
                         " (" + exibida.getMusicas().get(i).obterArtista() + ")\n";
-            }                          
+            }   
+            texto += "Comentários:\n";  
+            for (int i = 0; i < exibida.getComentarios().size(); i++) {
+                texto+= "     -  " + exibida.getComentarios().get(i).getComentario()+
+                        " " + exibida.getComentarios().get(i).getNomeUsuario() + 
+                        " (";
+                
+                
+                long tempoAtual = System.currentTimeMillis();
+                long diferenca = (tempoAtual - exibida.getComentarios().get(i).getData());
+
+                long diferencaSeg = diferenca/1000;
+                long diferencaMin = diferencaSeg/60;
+                long diferencaHor = diferencaMin/60;
+                long diferencaDia = diferencaHor/24;
+                
+                if (diferencaDia > 1) {
+                    texto+= diferencaDia + "d atrás)\n";
+                }else if (diferencaHor > 1) {
+                    texto+= diferencaHor + "h atrás)\n";
+                }else if (diferencaMin > 1) {
+                    texto+= diferencaMin + "m atrás)\n";
+                } else {
+                    texto+= diferencaSeg + "s atrás)\n";
+                }                                
+            }  
         return texto;
     }
 
@@ -345,6 +372,19 @@ public class PlaylistDAOLista implements PlaylistDAO {
             }            
             exibida.pontuar(pont);
         }        
-
     } 
+    
+    /**
+     * Adiciona comentario à playlist atual;
+     * @param comentario Comentario a ser adicionado
+     * @param atual Usuario que fez o comentário
+     */
+    public void comentar (String comentario, Usuario atual){
+        for (Playlist p : listaPlaylist) {
+            if (p.getNome().equals(exibida.getNome()) && p.getUsuario() == exibida.getUsuario()){
+                p.comentar(new Comentario(comentario, atual.obterNome()));
+                setarExibida(p);
+            }
+        }                
+    }
 }
