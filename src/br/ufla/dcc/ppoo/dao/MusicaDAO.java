@@ -3,6 +3,7 @@ package br.ufla.dcc.ppoo.dao;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -126,4 +127,14 @@ public interface MusicaDAO {
      * @return 
      */
     public boolean verificaMusicas(Musica musica, Usuario atual);
+    
+    /**
+     * Carrega os dados das Musicas de um arquivo binário
+     */
+    public void salvarDadosMusicas ();
+    
+    /**
+     * Salva os dados das Musicas em um arquivo binário
+     */
+    public ArrayList<Musica> carregarDadosMusicas();
 }

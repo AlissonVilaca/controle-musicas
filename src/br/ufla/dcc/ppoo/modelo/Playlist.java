@@ -1,5 +1,6 @@
 package br.ufla.dcc.ppoo.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @author alisson-vilaca
  */
-public class Playlist {
+public class Playlist implements Serializable {
     //nome da playlist
     private String nome;
     //usuario da playlist

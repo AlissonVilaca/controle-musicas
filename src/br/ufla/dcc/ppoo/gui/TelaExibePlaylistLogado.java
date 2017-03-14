@@ -153,8 +153,7 @@ public class TelaExibePlaylistLogado {
                     if (gerenciadorPlaylist.getExibida().getUsuario() == sessaoUsuario.obterUsuario() ){
                         Utilidades.msgErro(I18N.erroAvaliarMesmoUsuario());
                     } else {
-                        gerenciadorPlaylist.pontuar(pont,sessaoUsuario.obterUsuario());
-                        Utilidades.msgInformacao(I18N.obterPlaylistAvaliadaSucesso());
+                        gerenciadorPlaylist.pontuar(pont,sessaoUsuario.obterUsuario());                        
                    }                    
                 } else {
                     Utilidades.msgErro(I18N.erroPontuacaoInvalida());

@@ -2,6 +2,11 @@ package br.ufla.dcc.ppoo.dao.lista;
 
 import br.ufla.dcc.ppoo.dao.UsuarioDAO;
 import br.ufla.dcc.ppoo.modelo.Usuario;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +16,7 @@ import java.util.List;
  * 
  * @author Paulo Jr. e Julio Alves
  */
-public class UsuarioDAOLista implements UsuarioDAO {
+public final class UsuarioDAOLista implements UsuarioDAO, Serializable {
 
     // instância única da classe (Padrão de Projeto Singleton)
     private static UsuarioDAOLista instancia;
@@ -26,15 +31,15 @@ public class UsuarioDAOLista implements UsuarioDAO {
      * Constrói o objeto já definindo 5 usuários padrões
      */
     private UsuarioDAOLista() {
-        listaUsuario = new ArrayList<Usuario>();
+        listaUsuario = carregarDadosUsuarios();
 
-        // Cadastrei alguns usuários para testar o programa.
+      /*  // Cadastrei alguns usuários para testar o programa.
         char[] senha = new char[]{'1', '2', '3'};
         listaUsuario.add(new Usuario("paulo", senha, "Paulo"));
         listaUsuario.add(new Usuario("jose", senha, "José"));
         listaUsuario.add(new Usuario("flavia", senha, "Flávia"));
         listaUsuario.add(new Usuario("matheus", senha, "Matheus"));
-        listaUsuario.add(new Usuario("alexandre", senha, "Alexandre"));
+        listaUsuario.add(new Usuario("alexandre", senha, "Alexandre"));*/
         exibido = new Usuario();
 
     }
@@ -134,5 +139,35 @@ public class UsuarioDAOLista implements UsuarioDAO {
             }
         }
         
+    }
+    
+    /**
+     * Salva os dados dos Usuarios em um arquivo binário
+     */
+    public void salvarDadosUsuarios () {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new
+            FileOutputStream("Usuarios.bin"));            
+            oos.writeObject(listaUsuario);
+            oos.close();
+
+        } catch (Exception e) {}        
+    }
+    
+    /**
+     * Carrega os dados dos Usuarios de um arquivo binário
+     * @return 
+     */
+    @Override
+    public ArrayList<Usuario> carregarDadosUsuarios() {
+        ArrayList<Usuario> lista = new ArrayList<Usuario>();
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new
+            FileInputStream("Usuarios.bin"));
+            lista = (ArrayList<Usuario>) ois.readObject();
+            ois.close();
+            return lista;
+        } catch (Exception e) {}
+        return lista;
     }
 }

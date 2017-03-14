@@ -97,4 +97,18 @@ public class GerenciadorUsuarios {
         
         repositorioUsuario.somarAvaliacao(u,pont);
     }
+    
+    /**
+     * Carrega os dados dos Usuarios de um arquivo binário
+     */    
+    public void carregarDadosUsuarios(){
+        repositorioUsuario.carregarDadosUsuarios();
+    }
+    
+    /**
+     * Salva os dados dos Usuarios em um arquivo binário
+     */
+    public void salvarDadosUsuarios(){        
+        repositorioUsuario.salvarDadosUsuarios();
+    }
 }

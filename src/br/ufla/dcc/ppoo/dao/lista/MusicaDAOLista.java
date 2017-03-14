@@ -3,6 +3,11 @@ import br.ufla.dcc.ppoo.dao.MusicaDAO;
 import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +17,7 @@ import java.util.List;
  *
  * @author alisson-vilaca
  */
-public class MusicaDAOLista implements MusicaDAO{    
+public class MusicaDAOLista implements MusicaDAO, Serializable{    
     
     // instância única da classe (Padrão de Projeto Singleton)
     private static MusicaDAOLista instancia;
@@ -28,7 +33,7 @@ public class MusicaDAOLista implements MusicaDAO{
     * encontrei uma forma de chamar este construtor de outra maneira.
     */ 
     private MusicaDAOLista(String auxiliar){
-        listaMusica = new ArrayList<Musica>();                
+        listaMusica = carregarDadosMusicas();                
     }
      
     /**
@@ -42,51 +47,12 @@ public class MusicaDAOLista implements MusicaDAO{
         }
         return instancia;
     }
+
     
+    //?????
     /**
      * Retorna a lista de músicas do usuário 
      * Pular Pesquisar nos Fóruns
-Esconder o bloco Pesquisar nos Fóruns
-Pesquisar nos Fóruns
-Buscar
-Buscar
-
-Pesquisa AvançadaAjuda com Buscar
-Pular Últimas notícias
-Esconder o bloco Últimas notícias
-Últimas notícias
-
-    9 Mar, 19:16
-    Julio César Alves
-    Lista de Exercícios 4 cancelada
-    9 Mar, 11:52
-    Julio César Alves
-    Feedback - Trabalho 2 - 2ª Entrega
-    3 Mar, 15:33
-    Paulo Afonso Parreira Júnior
-    Notas P2
-    23 Feb, 20:31
-    Julio César Alves
-    Oportunidade - Bolsa PIBIC/CNPq
-    15 Feb, 09:28
-    Julio César Alves
-    Material para Prova de hoje
-
-Tópicos antigos ...
-Pular Próximos eventos
-Esconder o bloco Próximos eventos
-Próximos eventos
-Não há nenhum evento próximo
-Calendário...
-Novo evento...
-Pular Atividade recente
-Esconder o bloco Atividade recente
-Atividade recente
-Atividade desde Tuesday, 14 Mar 2017, 07:42
-Relatório completo da atividade recente
-
-Nenhuma atividade recente
-
      * @param login
      * @return lista de musicas do usuário
      */
@@ -324,5 +290,36 @@ Nenhuma atividade recente
         }        
         return false;
     
+    }
+    
+    /**
+     * Salva os dados das Musicas em um arquivo binário
+     */
+    @Override
+    public void salvarDadosMusicas () {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new
+            FileOutputStream("Musicas.bin"));            
+            oos.writeObject(listaMusica);
+            oos.close();
+        } catch (Exception e) {}
+        
+    }
+    
+    /**
+     * Carrega os dados das Musicas de um arquivo binário
+     * @return 
+     */
+    @Override
+    public ArrayList<Musica> carregarDadosMusicas() {
+        ArrayList<Musica> teste= new ArrayList<>();
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new
+            FileInputStream("Musicas.bin"));
+            teste = (ArrayList<Musica>) ois.readObject();
+            ois.close();
+            return teste;
+        } catch (Exception e) {}
+        return teste;
     }
 }

@@ -181,4 +181,18 @@ public class GerenciadorMusicas {
     public Musica buscaMusicasPeloNome(Musica u,Usuario atual){          
         return music.buscaMusicasPeloNome(u, atual);
     }
+    
+    /**
+     * Carrega os dados das Musicas de um arquivo binário
+     */
+    public void salvarDadosMusicas (){
+        music.salvarDadosMusicas();
+    }
+    
+    /**
+     * Salva os dados das Musicas em um arquivo binário
+     */
+    public void carregarDadosMusicas(){
+        music.carregarDadosMusicas();
+    }
 }

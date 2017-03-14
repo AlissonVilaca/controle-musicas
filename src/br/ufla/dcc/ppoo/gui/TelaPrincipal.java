@@ -3,6 +3,9 @@ package br.ufla.dcc.ppoo.gui;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
+import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
+import br.ufla.dcc.ppoo.servicos.GerenciadorUsuarios;
 import br.ufla.dcc.ppoo.util.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +38,10 @@ public class TelaPrincipal {
     private final TelaFiltroPlaylists telaFiltroPlaylists;    
     // tela de filtro de Usuarios
     private final TelaFiltroUsuarios telaFiltroUsuarios; 
+    
+    private GerenciadorMusicas gerenciadorMusicas;
+    private GerenciadorUsuarios gerenciadorUsuarios;
+    private GerenciadorPlaylists gerenciadorPlaylists;
     
     // janela da tela principal
     private JFrame janela;
@@ -71,14 +78,17 @@ public class TelaPrincipal {
         telaMinhasPlaylists = new TelaMinhasPlaylists(this);
         telaFiltroPlaylists = new TelaFiltroPlaylists(this);
         telaFiltroUsuarios = new TelaFiltroUsuarios(this);
+        gerenciadorMusicas = new GerenciadorMusicas();
+        gerenciadorPlaylists = new GerenciadorPlaylists();
+        gerenciadorUsuarios = new GerenciadorUsuarios();
     }
 
     /**
      * Inicializa a tela
      */
-    public void inicializar() {
+    public void inicializar() {       
         // Serve para o caso em que o usuário
-        // decidiu mudar o idioma da aplicação.
+        // decidiu mudar o idioma da aplicação.                
         if (janela != null) {
             janela.dispose();
         }
@@ -95,6 +105,11 @@ public class TelaPrincipal {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoSaida())) {
+                    //Salva os dados dos arquivos binários
+                    gerenciadorMusicas.salvarDadosMusicas();
+                    gerenciadorPlaylists.salvarDadosPlaylists();
+                    gerenciadorUsuarios.salvarDadosUsuarios();
+                    
                     System.exit(0);
                 }
             }
@@ -177,6 +192,11 @@ public class TelaPrincipal {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (Utilidades.msgConfirmacao(I18N.obterConfirmacaoSaida())) {
+                    //Salva os dados dos arquivos binários
+                    gerenciadorMusicas.salvarDadosMusicas();
+                    gerenciadorPlaylists.salvarDadosPlaylists();
+                    gerenciadorUsuarios.salvarDadosUsuarios();
+                    
                     System.exit(0);
                 }
             }
@@ -247,12 +267,6 @@ public class TelaPrincipal {
         menuPrincipal = new JMenuBar();
         construirMenuInicio();
 
-        if (sessaoUsuario.estahLogado()) {
-            // Aqui você poderá adicionar outros menus adequados
-            // ao seu projeto que serão exibidos quando o
-            // usuário estiver logado no sistema.
-        }
-
         construirMenuIdioma();
         construirMenuAjuda();
         janela.setJMenuBar(menuPrincipal);
@@ -285,7 +299,7 @@ public class TelaPrincipal {
      *
      * @param args Argumentos passados na execução do programa.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         new TelaPrincipal().inicializar();
     }
 

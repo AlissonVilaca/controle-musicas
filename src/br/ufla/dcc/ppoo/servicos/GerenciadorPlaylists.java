@@ -245,4 +245,18 @@ public class GerenciadorPlaylists {
     public List<Playlist> getPlaylists (){
         return playlist.getPlaylists();        
     }
+    
+    /**
+     * Carrega os dados das Playlists de um arquivo binário
+     */
+    public void carregarDadosPlaylists(){
+        playlist.carregarDadosPlaylists();
+    }
+    
+    /**
+     * Salva os dados das Playlists em um arquivo binário
+     */
+    public void salvarDadosPlaylists (){
+        playlist.salvarDadosPlaylists();
+    }
 }

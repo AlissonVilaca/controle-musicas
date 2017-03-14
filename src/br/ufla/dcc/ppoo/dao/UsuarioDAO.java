@@ -1,6 +1,7 @@
 package br.ufla.dcc.ppoo.dao;
 
 import br.ufla.dcc.ppoo.modelo.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,4 +53,14 @@ public interface UsuarioDAO {
      * @param pont valor a ser somado
      */
     public void somarAvaliacao(Usuario u, int pont);
+    
+    /**
+     * Carrega os dados dos Usuarios de um arquivo binário
+     */
+    public ArrayList<Usuario> carregarDadosUsuarios();
+    
+    /**
+     * Salva os dados dos Usuarios em um arquivo binário
+     */
+    public void salvarDadosUsuarios();
 }

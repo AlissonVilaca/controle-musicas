@@ -9,6 +9,11 @@ import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
 import br.ufla.dcc.ppoo.servicos.GerenciadorUsuarios;
 import br.ufla.dcc.ppoo.util.Utilidades;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author alisson-vilaca
  */
-public class PlaylistDAOLista implements PlaylistDAO {
+public class PlaylistDAOLista implements PlaylistDAO,Serializable {
     // instância única da classe (Padrão de Projeto Singleton)
     private static PlaylistDAOLista instancia;
     
@@ -46,7 +51,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
     * encontrei uma forma de chamar este construtor de outra maneira.
     */ 
     private PlaylistDAOLista(String auxiliar){
-        listaPlaylist = new ArrayList<Playlist>();   
+        listaPlaylist = carregarDadosPlaylists();   
         playlistSendoEdiatada = new Playlist("", new Usuario(), null, null,false);        
         exibida = new Playlist("", new Usuario(), null, null,false); 
         importou = false;
@@ -375,6 +380,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
                 }
             }            
             exibida.pontuar(pont);
+            Utilidades.msgInformacao(I18N.obterPlaylistAvaliadaSucesso());
         }        
     } 
     
@@ -406,5 +412,32 @@ public class PlaylistDAOLista implements PlaylistDAO {
             }
         }
         return l;
+    }
+    
+    /**
+     * Carrega os dados das Playlists de um arquivo binário
+     */
+    public void salvarDadosPlaylists () {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new
+            FileOutputStream("Playlists.bin"));            
+            oos.writeObject(listaPlaylist);
+            oos.close();
+        } catch (Exception e) {}        
+    }
+    
+    /**
+     * Salva os dados das Musicas em um arquivo binário
+     */
+    public ArrayList<Playlist> carregarDadosPlaylists() {
+        ArrayList<Playlist> lista = new ArrayList<>();
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new
+            FileInputStream("Playlists.bin"));
+            lista = (ArrayList<Playlist>) ois.readObject();
+            ois.close();
+            return lista;
+        } catch (Exception e) {}
+        return lista;
     }
 }

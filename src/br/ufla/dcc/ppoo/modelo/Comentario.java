@@ -1,10 +1,12 @@
 package br.ufla.dcc.ppoo.modelo;
 
+import java.io.Serializable;
+
 /**
  * Classe que representa os comentarios das playlists.
  * @author Pichau
  */
-public class Comentario {
+public class Comentario implements Serializable {
     private String comentario;
     private String nomeUsuario;
     private long data;

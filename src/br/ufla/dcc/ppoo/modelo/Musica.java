@@ -1,10 +1,12 @@
 package br.ufla.dcc.ppoo.modelo;
 
+import java.io.Serializable;
+
 /** Representa uma música no sistema
  *
  * @author alisson-vilaca
  */
-public class Musica {    
+public class Musica implements Serializable {    
     // Titulo da música
     private String titulo;    
     // Artista da musica
