@@ -32,7 +32,9 @@ public class TelaPrincipal {
     // tela de gestão das playlists
     private final TelaMinhasPlaylists telaMinhasPlaylists;
     // tela de filtro de Playlists
-    private final TelaFiltroPlaylists telaFiltroPlaylists;
+    private final TelaFiltroPlaylists telaFiltroPlaylists;    
+    // tela de filtro de Usuarios
+    private final TelaFiltroUsuarios telaFiltroUsuarios; 
     
     // janela da tela principal
     private JFrame janela;
@@ -56,7 +58,7 @@ public class TelaPrincipal {
     private JMenuItem menuMinhasMusicas;
     private JMenuItem menuMinhasPlaylists;
     private JMenuItem menuVisualizarPlaylists;
-    
+    private JMenuItem menuVisualizarUsuarios;
 
     /**
      * Construtor incializa as demais telas e sessão de usuário.
@@ -68,6 +70,7 @@ public class TelaPrincipal {
         sessaoUsuario = SessaoUsuario.obterInstancia();
         telaMinhasPlaylists = new TelaMinhasPlaylists(this);
         telaFiltroPlaylists = new TelaFiltroPlaylists(this);
+        telaFiltroUsuarios = new TelaFiltroUsuarios(this);
     }
 
     /**
@@ -124,6 +127,13 @@ public class TelaPrincipal {
             @Override
             public void actionPerformed(ActionEvent e) {
                 telaFiltroPlaylists.inicializar();
+            }
+        });
+        
+         menuVisualizarUsuarios.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                telaFiltroUsuarios.inicializar();
             }
         });
 
@@ -185,15 +195,17 @@ public class TelaPrincipal {
         menuMinhasMusicas = new JMenuItem(I18N.obterMenuMinhasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
         menuMinhasPlaylists = new JMenuItem(I18N.obterMenuListasMusicas(), GerenciadorDeImagens.MINHAS_MUSICAS);
         menuVisualizarPlaylists = new JMenuItem(I18N.obterMenuVisualizaPlaylist(), GerenciadorDeImagens.MINHAS_MUSICAS);
-
+        menuVisualizarUsuarios = new JMenuItem(I18N.obterMenuVisualizaUsuarios(), GerenciadorDeImagens.CADASTRAR_USUARIO);
+        
         if (!sessaoUsuario.estahLogado()) {
             menuInicio.add(menuEntrar);
             menuInicio.add(menuCadastrarUsuario);
-            menuInicio.add(menuVisualizarPlaylists);
+            menuInicio.add(menuVisualizarPlaylists);            
         } else {             
             menuInicio.add(menuMinhasMusicas);
             menuInicio.add(menuMinhasPlaylists);
             menuInicio.add(menuVisualizarPlaylists);
+            menuInicio.add(menuVisualizarUsuarios);
             menuInicio.add(menuLogout);
             
         }

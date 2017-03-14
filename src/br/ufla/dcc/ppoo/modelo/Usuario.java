@@ -14,6 +14,8 @@ public class Usuario {
     private char[] senha;
     // nome do usuário
     private String nome; 
+    // pontuação do usuario
+    private int pontuacao;
     
     /**
      * Constrói um usuário a partir de seu login, senha e nome.
@@ -25,7 +27,8 @@ public class Usuario {
     public Usuario(String login, char[] senha, String nome) {
         this.login = login;
         this.senha = Arrays.copyOf(senha, senha.length);
-        this.nome = nome;                 
+        this.nome = nome;     
+        pontuacao = 0;
     }
     
     /**
@@ -70,5 +73,25 @@ public class Usuario {
     public String obterNome() {
         return nome;
     }
-      
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setSenha(char[] senha) {
+        this.senha = senha;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }          
+    
 }

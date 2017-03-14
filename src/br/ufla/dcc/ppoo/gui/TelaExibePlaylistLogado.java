@@ -182,14 +182,10 @@ public class TelaExibePlaylistLogado {
             public void actionPerformed(ActionEvent e) {                
                 String comentario = JOptionPane.showInputDialog("Digite seu comentário para essa Playlist");
                 if (comentario.length() < 144){
-                  //  if (gerenciadorPlaylist.getExibida().getUsuario() == sessaoUsuario.obterUsuario() ){
-                  //      Utilidades.msgErro(I18N.erroAvaliarMesmoUsuario());
-                  //  } else {
                         gerenciadorPlaylist.comentar(comentario,sessaoUsuario.obterUsuario());
-                        Utilidades.msgInformacao(I18N.obterPlaylistAvaliadaSucesso());
-                //   }                    
+                        Utilidades.msgInformacao(I18N.obterPlaylistComentadaSucesso());                   
                 } else {
-                    Utilidades.msgErro(I18N.erroPontuacaoInvalida());
+                    Utilidades.msgErro(I18N.erroQtdCaracterInvalida());
                 }                
                 janela.dispose();
                 inicializar();

@@ -67,7 +67,7 @@ public class Playlist {
     }
 
     public List<String> getPalavras() {
-        return Collections.unmodifiableList(listaPalavras);
+        return listaPalavras;
     }
     
     public List<Musica> getMusicas() {
@@ -130,7 +130,7 @@ public class Playlist {
     }
 
     public List<Usuario> getUsuariosQueAvaliaram() {
-        return Collections.unmodifiableList(usuariosQueAvaliaram);
+        return usuariosQueAvaliaram;
     }
 
     public void setUsuariosQueAvaliaram(List<Usuario> usuariosQueAvaliaram) {

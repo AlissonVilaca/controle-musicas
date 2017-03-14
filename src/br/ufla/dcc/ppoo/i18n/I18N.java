@@ -794,5 +794,36 @@ public class I18N {
      */
     public static String obterPlaylistAvaliadaSucesso() {
         return rb.getString("sucesso.avaliou");
-    }     
+    }    
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterPlaylistComentadaSucesso() {
+        return rb.getString("sucesso.comentou");
+    }  
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String erroQtdCaracterInvalida() {
+        return rb.getString("erro.comentou");
+    }
+    
+    /**
+     * Retorna o texto do rótulo login do usuário.
+     *
+     * @return Texto do rótulo login do usuário.
+     */
+    public static String obterMenuVisualizaUsuarios() {
+        return rb.getString("menu.visualizaUsuarios");
+    }
+    
+    public static String obterBotaoFechar() {
+        return rb.getString("botao.fechar");        
+    }
 }

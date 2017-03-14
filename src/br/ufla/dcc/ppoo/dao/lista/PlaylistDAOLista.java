@@ -7,6 +7,7 @@ import br.ufla.dcc.ppoo.modelo.Musica;
 import br.ufla.dcc.ppoo.modelo.Playlist;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorMusicas;
+import br.ufla.dcc.ppoo.servicos.GerenciadorUsuarios;
 import br.ufla.dcc.ppoo.util.Utilidades;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +35,8 @@ public class PlaylistDAOLista implements PlaylistDAO {
     //variavel usada para controlar a tela de Minhas de Playlists, para inicializar 
     // a tela corretamente, quando é importada uma música
     private boolean importou;
-    
+    // referência para o gerenciador de usuários
+    private GerenciadorUsuarios gerenciadorUsuarios;
     
     /**
     * Constrói o objeto lista de playlists. 
@@ -49,6 +51,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
         exibida = new Playlist("", new Usuario(), null, null,false); 
         importou = false;
         gerenciadorMusicas = new GerenciadorMusicas();
+        gerenciadorUsuarios = new GerenciadorUsuarios();
     }
     
     /**
@@ -367,6 +370,7 @@ public class PlaylistDAOLista implements PlaylistDAO {
             for (Playlist p : listaPlaylist) {
                 if (p.getNome().equals(exibida.getNome()) && p.getUsuario() == exibida.getUsuario()){
                     p.pontuar(pont);
+                    gerenciadorUsuarios.somarAvaliacao(p.getUsuario(),pont);                                        
                     p.adicionarUsuario(atual);
                 }
             }            
@@ -386,5 +390,21 @@ public class PlaylistDAOLista implements PlaylistDAO {
                 setarExibida(p);
             }
         }                
+    }
+    
+    /**
+     * Retorna a lista de Playlists do Usuario exibido
+     * @return 
+     */
+    public List<Playlist> getPlaylists (){
+        List<Playlist> l = new ArrayList<>();
+        if (listaPlaylist != null){
+            for (Playlist p : listaPlaylist){
+                if (gerenciadorUsuarios.getExibido().obterLogin().equals(p.getUsuario().obterLogin()) ){
+                    l.add(p);
+                }
+            }
+        }
+        return l;
     }
 }

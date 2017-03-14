@@ -144,4 +144,10 @@ public interface PlaylistDAO {
      * @param atual Usuario que fez o comentário
      */
     public void comentar (String comentario, Usuario atual);
+    
+    /**
+     * Retorna a lista de Playlists do Usuario exibido
+     * @return 
+     */
+    public List<Playlist> getPlaylists ();
 }

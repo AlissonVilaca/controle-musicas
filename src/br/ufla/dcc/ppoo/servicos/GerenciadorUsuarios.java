@@ -5,6 +5,7 @@ import br.ufla.dcc.ppoo.dao.lista.UsuarioDAOLista;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.seguranca.SessaoUsuario;
+import java.util.List;
 
 /**
  * Classe que representa a camada de negócios de cadastro de usuários. Permite
@@ -18,7 +19,6 @@ public class GerenciadorUsuarios {
     private final UsuarioDAO repositorioUsuario;
     // atributo para controle de sessão (autenticação do usuário)
     private final SessaoUsuario sessaoUsuario;
-
     /**
      * Constroi o gerenciador de usuários, inicializando as camadas de acesso a 
      * dados e de sessão.
@@ -56,5 +56,45 @@ public class GerenciadorUsuarios {
             throw new Exception(I18N.obterErroUsuarioJaCadastrado());
         }
         repositorioUsuario.adicionarUsuario(usuario);
+    }
+    
+    /**
+     * Retorna lista de usuarios que tem nome igual às palavras da lista
+     * @param palavra lista de palavras
+     * @return 
+     */
+    public List<Usuario> buscaUsuarios(List<String> palavra){
+       return repositorioUsuario.buscaUsuarios(palavra);
+    }
+    
+    /**
+     * Seta o Usuario que o Usuario selecionou para ser exibido
+     */
+    public void setarExibido(Usuario usuario){
+       repositorioUsuario.setarExibido(usuario);
+    }  
+    
+    /**
+     * Retorna o nome do usuario que o Usuario selecionou para ser exibido
+     */
+    public String getUsuarioExibido(){
+       return repositorioUsuario.getUsuarioExibido();
+    }  
+    
+    /**
+     * Retorna o Usuario que o Usuario selecionou para ser exibido
+     */
+    public Usuario getExibido(){
+       return repositorioUsuario.getExibido();
+    }  
+    
+    /**
+     * Soma a ultima avaliação à avaliação geral do usuario
+     * @param u usuario
+     * @param pont valor a ser somado
+     */
+    public void somarAvaliacao(Usuario u, int pont){
+        
+        repositorioUsuario.somarAvaliacao(u,pont);
     }
 }

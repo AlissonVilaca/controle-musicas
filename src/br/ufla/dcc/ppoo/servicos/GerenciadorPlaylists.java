@@ -237,4 +237,12 @@ public class GerenciadorPlaylists {
     public void comentar(String comentario,Usuario atual){
         playlist.comentar(comentario,atual);
     }
+    
+    /**
+     * Retorna a lista de Playlists do Usuario exibido
+     * @return 
+     */
+    public List<Playlist> getPlaylists (){
+        return playlist.getPlaylists();        
+    }
 }

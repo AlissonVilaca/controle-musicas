@@ -45,7 +45,48 @@ public class MusicaDAOLista implements MusicaDAO{
     
     /**
      * Retorna a lista de músicas do usuário 
-     * 
+     * Pular Pesquisar nos Fóruns
+Esconder o bloco Pesquisar nos Fóruns
+Pesquisar nos Fóruns
+Buscar
+Buscar
+
+Pesquisa AvançadaAjuda com Buscar
+Pular Últimas notícias
+Esconder o bloco Últimas notícias
+Últimas notícias
+
+    9 Mar, 19:16
+    Julio César Alves
+    Lista de Exercícios 4 cancelada
+    9 Mar, 11:52
+    Julio César Alves
+    Feedback - Trabalho 2 - 2ª Entrega
+    3 Mar, 15:33
+    Paulo Afonso Parreira Júnior
+    Notas P2
+    23 Feb, 20:31
+    Julio César Alves
+    Oportunidade - Bolsa PIBIC/CNPq
+    15 Feb, 09:28
+    Julio César Alves
+    Material para Prova de hoje
+
+Tópicos antigos ...
+Pular Próximos eventos
+Esconder o bloco Próximos eventos
+Próximos eventos
+Não há nenhum evento próximo
+Calendário...
+Novo evento...
+Pular Atividade recente
+Esconder o bloco Atividade recente
+Atividade recente
+Atividade desde Tuesday, 14 Mar 2017, 07:42
+Relatório completo da atividade recente
+
+Nenhuma atividade recente
+
      * @param login
      * @return lista de musicas do usuário
      */

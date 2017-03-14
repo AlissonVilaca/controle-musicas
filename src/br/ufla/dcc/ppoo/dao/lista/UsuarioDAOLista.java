@@ -18,6 +18,9 @@ public class UsuarioDAOLista implements UsuarioDAO {
     
     // lista em em memória dos usuários cadastrados
     private final List<Usuario> listaUsuario;
+    
+    //Usuario que será exibido
+    private Usuario exibido;
 
     /**
      * Constrói o objeto já definindo 5 usuários padrões
@@ -32,6 +35,7 @@ public class UsuarioDAOLista implements UsuarioDAO {
         listaUsuario.add(new Usuario("flavia", senha, "Flávia"));
         listaUsuario.add(new Usuario("matheus", senha, "Matheus"));
         listaUsuario.add(new Usuario("alexandre", senha, "Alexandre"));
+        exibido = new Usuario();
 
     }
 
@@ -71,5 +75,64 @@ public class UsuarioDAOLista implements UsuarioDAO {
     @Override
     public void adicionarUsuario(Usuario usuario) {
         listaUsuario.add(usuario);
+    }
+    
+    /**
+     * Retorna lista de usuarios que tem nome igual às palavras da lista
+     * @param palavra lista de palavras
+     * @return 
+     */
+    public List<Usuario> buscaUsuarios(List<String> palavra){
+       List<Usuario> lista = new ArrayList<Usuario>();
+        for ( String s : palavra){
+            for (Usuario p : listaUsuario) {  
+                if(p.obterNome().equals(s)){
+                    if (!lista.contains(p)){
+                        lista.add(p);
+                    }                    
+                }
+            }                                    
+        }
+        return lista;
+    }
+    
+    /**
+     * Seta o Usuario que o Usuario selecionou para ser exibido
+     */
+    public void setarExibido(Usuario usuario){
+        exibido.setLogin(usuario.obterLogin());
+        exibido.setNome(usuario.obterNome());
+        exibido.setSenha(usuario.obterSenha());
+        exibido.setPontuacao(usuario.getPontuacao());
+    
+    }
+    
+    /**
+     * Retorna o Usuario que o Usuario selecionou para ser exibido
+     */
+    public String getUsuarioExibido(){        
+        return "Nome do usuario: " + exibido.obterNome() + "\nPontuação: " + exibido.getPontuacao()
+                + "\nEmail (login): " + exibido.obterLogin();
+    }
+    
+    /**
+     * Retorna o Usuario que o Usuario selecionou para ser exibido
+     */
+    public Usuario getExibido(){        
+        return exibido;
+    }
+    
+    /**
+     * Soma a ultima avaliação à avaliação geral do usuario
+     * @param u usuario
+     * @param pont valor a ser somado
+     */
+    public void somarAvaliacao(Usuario u, int pont){
+        for(Usuario p : listaUsuario){
+            if (p.obterNome().equals(u.obterNome())){                
+                p.setPontuacao(pont+p.getPontuacao());
+            }
+        }
+        
     }
 }
