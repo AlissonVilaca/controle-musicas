@@ -442,7 +442,7 @@ public class TelaMinhasPlaylists {
             @Override
             public void actionPerformed(ActionEvent e) {                               
                 try{                                                    
-                    if (txtNome.getText() == ""){  //Faz o tratamento de erro caso nome esteja em branco          
+                    if (txtNome.getText().equals("")){  //Faz o tratamento de erro caso nome esteja em branco          
                         throw new Exception(I18N.obterErroNomeEmBranco());
                     } else if(gerenciadorPlaylists.obterPlaylistTemporaria().getPalavras().size() == 0){   //faz o tratamento de erros caso nao tenha palavras-chave
                         throw new Exception(I18N.obterErroPalavrasInsuficientes());

@@ -162,7 +162,7 @@ public class TelaPrincipal {
 
         menuMinhasMusicas.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {                
                 telaMinhasMusicas.inicializar();
             }
         });
@@ -305,7 +305,6 @@ public class TelaPrincipal {
 
     /**
      * Retorna uma referência para a janela
-     *
      * @return
      */
     public JFrame obterJanela() {

@@ -80,7 +80,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
     public List<Playlist> obterListaPlaylist(Usuario login) {
        List<Playlist> lista = new ArrayList<>() ;
         for (Playlist u : listaPlaylist) {
-            if (u.getUsuario() == login) {
+            if (u.getUsuario().obterLogin().equals(login.obterLogin())) {
                 lista.add(u);
             }
         }        
@@ -95,7 +95,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
      */
     public Playlist getPlaylist(Usuario login, String selecionada) {
         for (Playlist u : listaPlaylist) {
-            if (u.getNome().equals(selecionada) && (u.getUsuario() == login)){
+            if (u.getNome().equals(selecionada) && (u.getUsuario().obterLogin().equals(login.obterLogin()))){
                 return (u);
             }
         }   
@@ -118,7 +118,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
     public void editarPlaylist(List<Musica> m, String selecionada,boolean publi) {
         for (Playlist u : listaPlaylist) {
             if (u.getNome().equals(selecionada) 
-                    && (u.getUsuario()== playlistSendoEdiatada.getUsuario())){                
+                    && (u.getUsuario().obterLogin().equals(playlistSendoEdiatada.getUsuario().obterLogin()))){                
                 u.setNome(playlistSendoEdiatada.getNome());
                 u.setListaMusicas(m);
                 u.setListaPalavras(playlistSendoEdiatada.getPalavras());
@@ -151,7 +151,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
         //Tive que usar o iterator para que não ocorresse o erro ConcurrentModificationException
         for (Iterator<Playlist> i = listaPlaylist.iterator(); i.hasNext();) {
           Playlist u = i.next();
-          if (u.getNome().equals(titulo) && (u.getUsuario()== login)) {
+          if (u.getNome().equals(titulo) && (u.getUsuario().obterLogin().equals(login.obterLogin()))) {
             i.remove();
           }
         }
@@ -288,11 +288,11 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
                 long diferencaHor = diferencaMin/60;
                 long diferencaDia = diferencaHor/24;
                 
-                if (diferencaDia > 1) {
+                if (diferencaDia >= 1) {
                     texto+= diferencaDia + "d atrás)\n";
-                }else if (diferencaHor > 1) {
+                }else if (diferencaHor >= 1) {
                     texto+= diferencaHor + "h atrás)\n";
-                }else if (diferencaMin > 1) {
+                }else if (diferencaMin >= 1) {
                     texto+= diferencaMin + "m atrás)\n";
                 } else {
                     texto+= diferencaSeg + "s atrás)\n";
@@ -365,7 +365,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
     public void pontuar(int pont,Usuario atual){
         boolean avaliou = false;
         for (Usuario u : exibida.getUsuariosQueAvaliaram()){
-            if (u == atual){
+            if (u.obterLogin().equals(atual.obterLogin())){
                 avaliou = true;
             }
         }
@@ -373,7 +373,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
             Utilidades.msgErro(I18N.erroUsuarioJaAvaliou());
         } else {
             for (Playlist p : listaPlaylist) {
-                if (p.getNome().equals(exibida.getNome()) && p.getUsuario() == exibida.getUsuario()){
+                if (p.getNome().equals(exibida.getNome()) && p.getUsuario().obterLogin().equals(exibida.getUsuario().obterLogin())){
                     p.pontuar(pont);
                     gerenciadorUsuarios.somarAvaliacao(p.getUsuario(),pont);                                        
                     p.adicionarUsuario(atual);
@@ -391,7 +391,7 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
      */
     public void comentar (String comentario, Usuario atual){
         for (Playlist p : listaPlaylist) {
-            if (p.getNome().equals(exibida.getNome()) && p.getUsuario() == exibida.getUsuario()){
+            if (p.getNome().equals(exibida.getNome()) && p.getUsuario().obterLogin().equals(exibida.getUsuario().obterLogin())){
                 p.comentar(new Comentario(comentario, atual.obterNome()));
                 setarExibida(p);
             }
@@ -428,16 +428,18 @@ public class PlaylistDAOLista implements PlaylistDAO,Serializable {
     
     /**
      * Salva os dados das Musicas em um arquivo binário
+     * @return 
      */
+    @Override
     public ArrayList<Playlist> carregarDadosPlaylists() {
         ArrayList<Playlist> lista = new ArrayList<>();
         try {
             ObjectInputStream ois = new ObjectInputStream(new
             FileInputStream("Playlists.bin"));
             lista = (ArrayList<Playlist>) ois.readObject();
-            ois.close();
+            ois.close();     
             return lista;
-        } catch (Exception e) {}
+        } catch (Exception e) {System.out.println("Erro Carregar Dados Playlists: "+e);}
         return lista;
     }
 }

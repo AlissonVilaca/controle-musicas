@@ -150,7 +150,7 @@ public class TelaExibePlaylistLogado {
                 String t = JOptionPane.showInputDialog("Digite a pontuação de 0 a 5");
                 int pont = Integer.parseInt(t);
                 if (pont>=0 && pont <= 5){
-                    if (gerenciadorPlaylist.getExibida().getUsuario() == sessaoUsuario.obterUsuario() ){
+                    if (gerenciadorPlaylist.getExibida().getUsuario().obterLogin().equals(sessaoUsuario.obterUsuario().obterLogin()) ){
                         Utilidades.msgErro(I18N.erroAvaliarMesmoUsuario());
                     } else {
                         gerenciadorPlaylist.pontuar(pont,sessaoUsuario.obterUsuario());                        

@@ -32,16 +32,7 @@ public final class UsuarioDAOLista implements UsuarioDAO, Serializable {
      */
     private UsuarioDAOLista() {
         listaUsuario = carregarDadosUsuarios();
-
-      /*  // Cadastrei alguns usuários para testar o programa.
-        char[] senha = new char[]{'1', '2', '3'};
-        listaUsuario.add(new Usuario("paulo", senha, "Paulo"));
-        listaUsuario.add(new Usuario("jose", senha, "José"));
-        listaUsuario.add(new Usuario("flavia", senha, "Flávia"));
-        listaUsuario.add(new Usuario("matheus", senha, "Matheus"));
-        listaUsuario.add(new Usuario("alexandre", senha, "Alexandre"));*/
         exibido = new Usuario();
-
     }
 
     /**
@@ -144,6 +135,7 @@ public final class UsuarioDAOLista implements UsuarioDAO, Serializable {
     /**
      * Salva os dados dos Usuarios em um arquivo binário
      */
+    @Override
     public void salvarDadosUsuarios () {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new
@@ -166,8 +158,8 @@ public final class UsuarioDAOLista implements UsuarioDAO, Serializable {
             FileInputStream("Usuarios.bin"));
             lista = (ArrayList<Usuario>) ois.readObject();
             ois.close();
-            return lista;
-        } catch (Exception e) {}
+            return lista;            
+        } catch (Exception e) {System.out.println("Erro carregar dados usuarios: "+e);}
         return lista;
     }
 }

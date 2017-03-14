@@ -136,5 +136,5 @@ public interface MusicaDAO {
     /**
      * Salva os dados das Musicas em um arquivo binário
      */
-    public ArrayList<Musica> carregarDadosMusicas();
+    public ArrayList<Musica> carregarDadosMusicas();   
 }

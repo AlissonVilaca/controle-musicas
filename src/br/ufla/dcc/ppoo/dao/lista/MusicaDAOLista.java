@@ -32,8 +32,8 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     * construtor seja chamado quando o método obterInstancia é usado. Não 
     * encontrei uma forma de chamar este construtor de outra maneira.
     */ 
-    private MusicaDAOLista(String auxiliar){
-        listaMusica = carregarDadosMusicas();                
+    private MusicaDAOLista(){
+        listaMusica = carregarDadosMusicas();  
     }
      
     /**
@@ -43,13 +43,11 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
      */
     public static MusicaDAOLista obterInstancia() {
         if (instancia == null) {
-            instancia = new MusicaDAOLista("auxiliar");
+            instancia = new MusicaDAOLista();
         }
         return instancia;
     }
 
-    
-    //?????
     /**
      * Retorna a lista de músicas do usuário 
      * Pular Pesquisar nos Fóruns
@@ -59,7 +57,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     public List<Musica> obterListaMusica(Usuario login) {
        List<Musica> lista = new ArrayList<>() ;
         for (Musica u : listaMusica) {
-            if (u.obterUsuario() == login) {
+            if (u.obterUsuario().obterLogin().equals(login.obterLogin())) {
                 lista.add(u);
             }
         }        
@@ -102,7 +100,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     @Override
     public void editarMusica(Musica musica, String selecionada, Usuario login) {       
         for (Musica u : listaMusica) {
-            if (u.obterTitulo().equals(selecionada) && (u.obterUsuario() == login)){
+            if (u.obterTitulo().equals(selecionada) && (u.obterUsuario().obterLogin().equals(login.obterLogin()))){
                 u.setAno(musica.obterAno());
                 u.setArtista(musica.obterArtista());
                 u.setGenero(musica.obterGenero());
@@ -124,7 +122,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
         //Tive que usar o iterator para que não ocorresse o erro ConcurrentModificationException
         for (Iterator<Musica> i = listaMusica.iterator(); i.hasNext();) {
           Musica u = i.next();
-          if (u.obterTitulo().equals(titulo) && (u.obterUsuario() == login)) {
+          if (u.obterTitulo().equals(titulo) && u.obterUsuario().obterLogin().equals(login.obterLogin())) {
             i.remove();
           }
         }
@@ -137,7 +135,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
      */
     public void marcar(Musica u, Usuario login) {
         for (Musica m : listaMusica) {
-            if (u == m && m.obterUsuario() == login) {
+            if (u.obterTitulo().equals(m.obterTitulo()) && m.obterUsuario().obterLogin().equals(login.obterLogin())) {
                 m.marcar();
             }            
         }
@@ -149,7 +147,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
      */
     public void desmarcar(Musica u, Usuario login) {
         for (Musica m : listaMusica) {
-            if (u == m && m.obterUsuario() == login) {
+            if (u.obterTitulo().equals(m.obterTitulo()) && m.obterUsuario().obterLogin().equals(login.obterLogin())) {
                 m.desmarcar();
             }            
         }
@@ -179,7 +177,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     public List<Musica> obterListaMusicasNaoMarcadas(Usuario login) {
        List<Musica> lista = new ArrayList<>() ;
         for (Musica u : listaMusica) {
-            if (u.obterUsuario() == login && !u.estaMarcada()) {
+            if (u.obterUsuario().obterLogin().equals(login.obterLogin()) && !u.estaMarcada()) {
                 lista.add(u);
             }
         }        
@@ -195,7 +193,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     public List<Musica> obterListaMusicasMarcadas(Usuario login) {
        List<Musica> lista = new ArrayList<>() ;
         for (Musica u : listaMusica) {
-            if (u.obterUsuario() == login && u.estaMarcada()) {
+            if (u.obterUsuario().obterLogin().equals(login.obterLogin()) && u.estaMarcada()) {
                 lista.add(u);
             }
         }        
@@ -224,7 +222,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     public void marcarMusicas (Playlist p){
         for (Musica m : listaMusica){
             for (Musica u : p.getMusicas()){
-                if (u.obterTitulo().equals(m.obterTitulo()) && u.obterUsuario() == m.obterUsuario()){
+                if (u.obterTitulo().equals(m.obterTitulo()) && u.obterUsuario().obterLogin().equals(m.obterUsuario().obterLogin())){
                     m.marcar();
                 }
             }            
@@ -269,7 +267,7 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
     public Musica buscaMusicasPeloNome(Musica u,Usuario atual){        
         Musica musica;
         for (Musica l : listaMusica) {
-            if ((l.obterUsuario() == atual) && l.obterTitulo().equals(u.obterTitulo()) ) {
+            if ((l.obterUsuario().obterLogin().equals(atual.obterLogin())) && l.obterTitulo().equals(u.obterTitulo()) ) {
                 return l;
             }
         }   
@@ -312,14 +310,14 @@ public class MusicaDAOLista implements MusicaDAO, Serializable{
      */
     @Override
     public ArrayList<Musica> carregarDadosMusicas() {
-        ArrayList<Musica> teste= new ArrayList<>();
+        ArrayList<Musica> lista= new ArrayList<>();
         try {
             ObjectInputStream ois = new ObjectInputStream(new
             FileInputStream("Musicas.bin"));
-            teste = (ArrayList<Musica>) ois.readObject();
-            ois.close();
-            return teste;
-        } catch (Exception e) {}
-        return teste;
+            lista = (ArrayList<Musica>) ois.readObject();
+            ois.close();           
+            return lista;
+        } catch (Exception e) {System.out.println("Erro ao carregar dados musica: "+e);}
+        return lista;
     }
 }

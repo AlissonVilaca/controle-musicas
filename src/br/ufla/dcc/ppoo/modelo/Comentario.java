@@ -40,7 +40,5 @@ public class Comentario implements Serializable {
 
     public void setData(long data) {
         this.data = data;
-    }
-    
-    
+    }   
 }

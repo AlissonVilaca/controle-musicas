@@ -4,7 +4,6 @@ package br.ufla.dcc.ppoo.gui;
 import br.ufla.dcc.ppoo.i18n.I18N;
 import br.ufla.dcc.ppoo.imagens.GerenciadorDeImagens;
 import br.ufla.dcc.ppoo.modelo.Playlist;
-import br.ufla.dcc.ppoo.modelo.Usuario;
 import br.ufla.dcc.ppoo.servicos.GerenciadorPlaylists;
 import br.ufla.dcc.ppoo.servicos.GerenciadorUsuarios;
 import java.awt.Component;

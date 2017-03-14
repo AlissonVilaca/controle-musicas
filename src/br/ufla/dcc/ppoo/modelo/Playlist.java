@@ -2,7 +2,6 @@ package br.ufla.dcc.ppoo.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class Playlist implements Serializable {
      */
     public void apagarMusica(Musica m){
         for (Musica u : listaMusicas){            
-            if (u == m){
+            if (u.obterTitulo().equals(m.obterTitulo()) && u.obterUsuario().equals(m.obterUsuario())){
                 listaMusicas.remove(u);
             }
         }    
@@ -97,8 +96,8 @@ public class Playlist implements Serializable {
      * @return 
      */
     public boolean comparaPlaylist (Playlist u){
-        if ((nome.equals(u.getNome()))      // este if deveria estar na classe musica, nã cabe ao if fazer
-                             && (usuario == u.getUsuario())//essa cmparação
+        if ((nome.equals(u.getNome()))     
+                             && (usuario.obterLogin().equals(u.getUsuario().obterLogin()))
                     ) {
             return true;
         } else {            

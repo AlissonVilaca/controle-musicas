@@ -128,7 +128,7 @@ public class Musica implements Serializable {
      */
     public boolean comparaMusicas (Musica u){
         if ((titulo.equals(u.obterTitulo()))      // este if deveria estar na classe musica, nã cabe ao if fazer
-                             && (usuario == u.obterUsuario())//essa cmparação
+                             && (usuario.obterLogin().equals(u.obterUsuario().obterLogin()))//essa cmparação
                     ) {
             return true;
         } else {            
